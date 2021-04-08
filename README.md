@@ -1,2 +1,2 @@
-# pathfinder
+# Pathfinder
 Path Finding Algorithm and Tools 
