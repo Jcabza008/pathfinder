@@ -1,25 +1,31 @@
 CC = g++
 CFLAGS = -g
+INCLUDE = -I ./include
 
 all: pathfinder mapgenerator
 
 clean:
-	rm -rf bin obj
+	rm -rf bin lib
 
 bin/:
 	mkdir -p bin
 
-obj/:
-	mkdir -p obj
+lib/:
+	mkdir -p lib
 
-pathfinder: bin/ obj/ obj/pathfinder.o
-	$(CC) $(CFLAGS) -o bin/pathfinder obj/pathfinder.o
+pathfinder: bin/ lib/pathfinder.o
+	$(CC) $(CFLAGS) $(INCLUDE) -o bin/pathfinder lib/pathfinder.o
 
-obj/pathfinder.o:
-	$(CC) $(CFLAGS) -c src/pathfinder/main.cpp -o obj/pathfinder.o
+mapgenerator: bin/ lib/mapgenerator.o
+	$(CC) $(CFLAGS) $(INCLUDE) -o bin/mapgenerator lib/mapgenerator.o
 
-mapgenerator: bin/ obj/ obj/mapgenerator.o
-	$(CC) $(CFLAGS) -o bin/mapgenerator obj/mapgenerator.o
+lib/pathfinder.o: lib/
+	$(CC) $(CFLAGS) $(INCLUDE) -c src/pathfinder/main.cpp -o lib/pathfinder.o
 
-obj/mapgenerator.o:
-	$(CC) $(CFLAGS) -c src/mapgenerator/main.cpp -o obj/mapgenerator.o
+lib/graph.o: lib/
+	$(CC) $(CFLAGS) $(INCLUDE) -c src/pathfinder/graph.cpp -o lib/graph.o
+
+lib/mapgenerator.o: lib/
+	$(CC) $(CFLAGS) $(INCLUDE) -c src/mapgenerator/main.cpp -o lib/mapgenerator.o
+
+

@@ -1,0 +1,26 @@
+{
+    "folders": [
+        {
+            "path": ".."
+        }
+    ],
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.cpptools",
+            "matepek.vscode-catch2-test-adapter",
+            "ms-vscode.cmake-tools",
+            "michelemelluso.gitignore",
+            "shardulm94.trailing-spaces"
+        ]
+    },
+    "settings": {
+        "files.associations": {
+            "iostream": "cpp",
+            "*.tcc": "cpp",
+            "list": "cpp"
+        },
+        "C_Cpp.default.includePath": [
+            "lib"
+        ],
+    }
+}
