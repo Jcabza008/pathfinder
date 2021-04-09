@@ -15,6 +15,18 @@ namespace PATHFINDER
         }
     }
 
+    DirectedGraphLinkedListImpl::DirectedGraphLinkedListImpl(std::vector<int> vertices, std::vector<DirectedEdge> edges)
+    {
+        for(auto it = vertices.cbegin(); it != vertices.cend(); it++)
+        {
+            this->addVertex(*it);
+        }
+        for(auto it = edges.cbegin(); it != edges.cend(); it++)
+        {
+            this->addEdge(it->from, it->to, it->weight);
+        }
+    }
+
     void DirectedGraphLinkedListImpl::addVertex(int id)
     {
         this->getOrCreateVertex(id);
@@ -45,6 +57,14 @@ namespace PATHFINDER
             vertex->second.erase(target);
     }
 
+    std::vector<int> DirectedGraphLinkedListImpl::getVertices()
+    {
+        std::vector<int> result;
+        for(auto it = this->index.cbegin(); it != this->index.cend(); it++)
+            result.push_back(it->first);
+        return result;
+    }
+
     std::vector<Target> DirectedGraphLinkedListImpl::getAdjecent(int id)
     {
         std::vector<Target> result;
@@ -64,7 +84,7 @@ namespace PATHFINDER
         return vertex;
     }
 
-    std::_List_iterator<PATHFINDER::Target> DirectedGraphLinkedListImpl::findTarget(std::list<Target> list, int to)
+    std::_List_iterator<PATHFINDER::Target> DirectedGraphLinkedListImpl::findTarget(std::list<Target>& list, int to)
     {
         for(auto it = list.begin(); it != list.end(); it++)
         {
@@ -74,5 +94,28 @@ namespace PATHFINDER
             }
         }
         return list.end();
+    }
+
+    bool operator==(const Target& lhs, const Target& rhs)
+    {
+        return lhs.to     == rhs.to &&
+               lhs.weight == rhs.weight;
+    }
+
+    bool operator<(const Target& lhs, const Target& rhs)
+    {
+        return lhs.to < rhs.to;
+    }
+
+    bool operator==(const DirectedEdge& lhs, const DirectedEdge& rhs)
+    {
+        return lhs.from   == rhs.from &&
+               lhs.to     == rhs.to   &&
+               lhs.weight == rhs.weight;
+    }
+
+    bool operator<(const DirectedEdge& lhs, const DirectedEdge& rhs)
+    {
+        return lhs.to < rhs.to;
     }
 }

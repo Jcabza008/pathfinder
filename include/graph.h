@@ -53,6 +53,12 @@ namespace PATHFINDER
         virtual void removeEdge(int from, int to) = 0;
 
         /**
+         * @brief Get a list of vertices
+         * @return std::vector<int> list of vetices
+         */
+        virtual std::vector<int> getVertices() = 0;
+
+        /**
          * @brief Get the adjecent vertices
          * @param id vertex id
          * @return vector of ids of adjecent vertices
@@ -66,6 +72,11 @@ namespace PATHFINDER
     class DirectedGraphLinkedListImpl : public DirectedGraph
     {
         public:
+        /**
+         * @brief Directed Graph Linked List Impl default constructor
+         */
+        DirectedGraphLinkedListImpl() {}
+
         /**
          * @brief Construct a new Directed Graph Linked List Impl object
          *        from a list of edges. If the desired graph contains a
@@ -112,6 +123,12 @@ namespace PATHFINDER
         virtual void removeEdge(int from, int to) override;
 
         /**
+         * @brief Get a list of vertices
+         * @return std::vector<int> list of vetices
+         */
+        virtual std::vector<int> getVertices();
+
+        /**
          * @brief Get the adjecent vertices
          * @param id vertex id
          * @return vector of ids of adjecent vertices
@@ -120,8 +137,14 @@ namespace PATHFINDER
 
         private:
         std::unordered_map<int, std::list<PATHFINDER::Target>>::iterator getOrCreateVertex(int id);
-        std::_List_iterator<PATHFINDER::Target> findTarget(std::list<Target> list, int to);
+        std::_List_iterator<PATHFINDER::Target> findTarget(std::list<Target>& list, int to);
 
         std::unordered_map<int, std::list<Target>> index;
     };
+
+    bool operator==(const Target& lhs, const Target& rhs);
+    bool operator<(const Target& lhs, const Target& rhs);
+
+    bool operator==(const DirectedEdge& lhs, const DirectedEdge& rhs);
+    bool operator<(const DirectedEdge& lhs, const DirectedEdge& rhs);
 }
