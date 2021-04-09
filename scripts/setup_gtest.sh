@@ -5,6 +5,10 @@ if [ "$GITHUB_ACTOR" == "nektos/act" ]; then
     echo "Running in 'act' container, not using sudo"
     SUDO=""
 fi
+if [ -f /.dockerenv ]; then
+    echo "Running in 'docker' container, not using sudo"
+    SUDO=""
+fi
 
 echo "Updating packages"
 $SUDO apt-get update

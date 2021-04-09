@@ -10,28 +10,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup Git
-        run: git config --global url."https://${{ secrets.ACCESS_TOKEN }}:@github.com/".insteadOf "https://github.com"
-
-      - name: Check out code
-        uses: actions/checkout@v1
-
-      - uses: DoozyX/clang-format-lint-action@v0.11
-        with:
-          source: '.'
-          exclude: './lib'
-          extensions: 'h,cpp'
-          clangFormatVersion: 11
-    env:
-        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-
   test:
     name: Test
     runs-on: ubuntu-latest
+    container:
+      image: catthehacker/ubuntu:act-latest
     steps:
       - name: Setup C++ environment
         uses: kurocha/setup-cpp@v1
@@ -58,6 +41,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    container:
+      image: catthehacker/ubuntu:act-latest
     steps:
       - name: Setup C++ environment
         uses: kurocha/setup-cpp@v1

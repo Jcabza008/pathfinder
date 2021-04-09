@@ -13,6 +13,10 @@ if [ "$GITHUB_ACTOR" == "nektos/act" ]; then
         echo "DISTRIB_RELEASE=18.04" > /etc/lsb-release
     fi
 fi
+if [ -f /.dockerenv ]; then
+    echo "Running in 'docker' container, not using sudo"
+    SUDO=""
+fi
 
 if [ -n "$GITHUB_EVENT_PATH" ]; then
     echo "Printing action event JSON file:"
