@@ -1,6 +1,8 @@
 # Pathfinder
 Path Finding Algorithm and Tools
 
+[![Validate](https://github.com/Jcabza008/pathfinder/actions/workflows/validate.yml/badge.svg?branch=master)](https://github.com/Jcabza008/pathfinder/actions/workflows/validate.yml)
+
 # Contributing
 ## Set up
 ### VS Code
