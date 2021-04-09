@@ -28,7 +28,7 @@ In order to do this you must:
   ```
   ACCESS_TOKEN=<your-generated-token>
   ```
-  Then to run you the workflows you execute: `act --secret-file <path-to-your-secret-file>`.
+  Then to run the workflows you execute: `act --secret-file <path-to-your-secret-file>`.
 
   Optionally you can specify:
     - `-W <path-of-desired-workflow>`.
