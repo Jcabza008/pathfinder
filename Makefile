@@ -6,7 +6,7 @@ CFLAGS = -g $(LIBSFLAG) $(INCLUDEFLAG)
 LIBS = lib/graph.o lib/util.o
 
 GTEST = gtest-1.7.0/include
-LIBGTEST = /usr/src/googletest/googletest/lib/libgtest_main.a /usr/src/googletest/googletest/lib/libgtest.a
+LIBGTEST = /usr/lib/libgtest_main.a /usr/lib/libgtest.a
 
 run_pathfinder: pathfinder
 	./bin/pathfinder
@@ -34,8 +34,8 @@ pathfinder: bin/ lib/pathfinder.o $(LIBS)
 mapgenerator: bin/ lib/mapgenerator.o $(LIBS)
 	$(CC) $(CFLAGS) -o bin/mapgenerator lib/mapgenerator.o
 
-tests: bin/ lib/tests/tests.o $(LIBS)
-	$(CC) $(CFLAGS) -o bin/tests lib/tests/tests.o $(LIBGTEST) $(LIBS) -lpthread
+tests: bin/ lib/tests.o $(LIBS)
+	$(CC) $(CFLAGS) -o bin/tests lib/tests.o $(LIBGTEST) $(LIBS) -lpthread
 
 # Main Libs
 lib/pathfinder.o: lib/ $(LIBS)
@@ -44,8 +44,8 @@ lib/pathfinder.o: lib/ $(LIBS)
 lib/mapgenerator.o: lib/ $(LIBS)
 	$(CC) $(CFLAGS) -c src/mapgenerator.cpp -o lib/mapgenerator.o
 
-lib/tests/tests.o: lib/ $(LIBS)
-	$(CC) $(CFLAGS) -c tests/tests.cpp -lpthread -o lib/tests/tests.o
+lib/tests.o: lib/ $(LIBS)
+	$(CC) $(CFLAGS) -c tests/tests.cpp -lpthread -o lib/tests.o
 
 # Libs
 lib/graph.o: lib/

@@ -1,0 +1,76 @@
+name: Validate
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    types: [opened, synchronize, reopened]
+
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    container:
+      image: catthehacker/ubuntu:act-latest
+    steps:
+      - name: Setup C++ environment
+        uses: kurocha/setup-cpp@v1
+
+      - name: Setup Git
+        run: git config --global url."https://${{ secrets.ACCESS_TOKEN }}:@github.com/".insteadOf "https://github.com"
+
+      - name: Check out code
+        uses: actions/checkout@v1
+
+      - name: 'Make all scripts executable'
+        run: |
+          chmod +x scripts/*
+
+      - name: Setup Env
+        run: scripts/setup_ubuntu_env.sh
+
+      - name: Setup Google Test
+        run: scripts/setup_gtest.sh
+
+      - name: Run Unit tests
+        run: make run_tests
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    container:
+      image: catthehacker/ubuntu:act-latest
+    steps:
+      - name: Setup C++ environment
+        uses: kurocha/setup-cpp@v1
+
+      - name: Setup Git
+        run: git config --global url."https://${{ secrets.ACCESS_TOKEN }}:@github.com/".insteadOf "https://github.com"
+
+      - name: Check out code
+        uses: actions/checkout@v1
+
+      - name: 'Make all scripts executable'
+        run: |
+          chmod +x scripts/*
+
+      - name: Setup Env
+        run: scripts/setup_ubuntu_env.sh
+
+      - name: Setup Google Test
+        run: scripts/setup_gtest.sh
+
+      - name: Build
+        run: make all
+
+      - name: Upload build artifacts
+        if: always() && github.actor != 'nektos/act'
+        uses: actions/upload-artifact@v2
+        with:
+          name: binaries
+          path: |
+            ./bin/*
+          if-no-files-found: error
