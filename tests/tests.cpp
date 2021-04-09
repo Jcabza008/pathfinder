@@ -8,7 +8,7 @@
 #include "graph.h"
 #include "util.h"
 
-#include "undirectedGraphLinkedListImpl_test.cpp"
+#include "graph_test.cpp"
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);

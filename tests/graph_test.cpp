@@ -6,7 +6,7 @@
 
 using namespace PATHFINDER;
 
-TEST(UndirectedGraphLinkedListImpl, addVertex_single_element)
+TEST(UndirectedGraphLinkedListImpl, addVertex_singleElement)
 {
     DirectedGraphLinkedListImpl graph;
     // Assert there are no vertices
@@ -21,7 +21,7 @@ TEST(UndirectedGraphLinkedListImpl, addVertex_single_element)
     ASSERT_EQ(vertices, std::vector<int>({0}));
 }
 
-TEST(UndirectedGraphLinkedListImpl, addEdge_vertices_exists)
+TEST(UndirectedGraphLinkedListImpl, addEdge_verticesExists)
 {
     DirectedGraphLinkedListImpl graph({1, 3}, {});
     // Assert vertices
