@@ -12,7 +12,22 @@ Path Finding Algorithm and Tools
   - Doxydoc Gen by Cschlosser: helps to generate documentation.
 
 ### Google Tests:
-  - [How to install Google Tests on Ubuntu](https://www.eriksmistad.no/getting-started-with-google-test-on-ubuntu/). Google Tests libraries should end up at           `/usr/src/googletest/googletest/lib/` to be compatible with the existing makefile.
+  - You can run `./scripts/setup_gtest.sh` to install and setup Google Tests.
+  - [How to install Google Tests on Ubuntu](https://www.eriksmistad.no/getting-started-with-google-test-on-ubuntu/). Google Tests libraries should end up at           `/usr/lib/` to be compatible with the existing makefile.
+
+### Nektos Act
+This repositore contains Github Actions to validate Pull Request. If desired, it is possible to run this workflows locally before pushing you changes; this enables faster feedback.
+In order to do this you must:
+- Install Act: [Act Repository](https://github.com/nektos/act), installation instructions are on their README.md.
+- Set Up Secrets: In order to run, this workflows use tokens stored in the form of secrets. You must create a Github Token with repo permissions, then create a     file in your computer and write:
+  ```
+  ACCESS_TOKEN=<your-generated-token>
+  ```
+  Then to run you the workflows you execute: `act --secret-file <path-to-your-secret-file>`.
+
+  Optionally you can specify:
+    - `-W <path-of-desired-workflow>`.
+    - `-j <name-of-specific-job>`.
 
 ## Building
 ### Important commands:
