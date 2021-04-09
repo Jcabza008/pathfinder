@@ -1,0 +1,91 @@
+{
+    "folders": [
+        {
+            "path": ".."
+        }
+    ],
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.cpptools",
+            "michelemelluso.gitignore",
+            "shardulm94.trailing-spaces",
+            "matepek.vscode-catch2-test-adapter",
+            "cschlosser.doxdocgen"
+        ]
+    },
+    "settings": {
+        "files.associations": {
+            "iostream": "cpp",
+            "*.tcc": "cpp",
+            "list": "cpp"
+        },
+        "C_Cpp.default.includePath": [
+            "include"
+        ],
+        "editor.tokenColorCustomizations": {
+            "textMateRules": [
+                {
+                    "scope": "googletest.failed",
+                    "settings": {
+                        "foreground": "#f00"
+                    }
+                },
+                {
+                    "scope": "googletest.passed",
+                    "settings": {
+                        "foreground": "#0f0"
+                    }
+                },
+                {
+                    "scope": "googletest.run",
+                    "settings": {
+                        "foreground": "#0f0"
+                    }
+                }
+            ]
+        },
+        "testMate.cpp.test.advancedExecutables": [
+            {
+               "pattern": "{bin}/{tests}",
+               "runTask": {"beforeEach": ["CompileTests"]}
+            }
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "(gdb) Launch",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "enter program name, for example ${workspaceFolder}/a.out",
+                "args": [],
+                "stopAtEntry": false,
+                "cwd": "${workspaceFolder}",
+                "environment": [],
+                "externalConsole": false,
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            {
+                "name": "Build And Run Tests",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceFolder}/bin/tests",
+                "args": [],
+                "stopAtEntry": false,
+                "cwd": "${workspaceFolder}",
+                "environment": [],
+                "externalConsole": false,
+                "MIMode": "gdb",
+                "preLaunchTask": "CompileTests"
+            }
+        ]
+    }
+}

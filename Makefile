@@ -1,25 +1,55 @@
 CC = g++
-CFLAGS = -g
+INCLUDEFLAG = -I include
+LIBFLAG = -L lib
+CFLAGS = -g $(LIBSFLAG) $(INCLUDEFLAG)
 
-all: pathfinder mapgenerator
+LIBS = lib/graph.o lib/util.o
+
+GTEST = gtest-1.7.0/include
+LIBGTEST = /usr/src/googletest/googletest/lib/libgtest_main.a /usr/src/googletest/googletest/lib/libgtest.a
+
+run_pathfinder: pathfinder
+	./bin/pathfinder
+
+run_mapgenerator: mapgenerator
+	./bin/mapgenerator
+
+run_tests: tests
+	./bin/tests
+
+all: pathfinder mapgenerator tests
 
 clean:
-	rm -rf bin obj
+	rm -rf bin lib
 
 bin/:
 	mkdir -p bin
 
-obj/:
-	mkdir -p obj
+lib/:
+	mkdir -p lib
 
-pathfinder: bin/ obj/ obj/pathfinder.o
-	$(CC) $(CFLAGS) -o bin/pathfinder obj/pathfinder.o
+pathfinder: bin/ lib/pathfinder.o $(LIBS)
+	$(CC) $(CFLAGS) -o bin/pathfinder lib/pathfinder.o
 
-obj/pathfinder.o:
-	$(CC) $(CFLAGS) -c src/pathfinder/main.cpp -o obj/pathfinder.o
+mapgenerator: bin/ lib/mapgenerator.o $(LIBS)
+	$(CC) $(CFLAGS) -o bin/mapgenerator lib/mapgenerator.o
 
-mapgenerator: bin/ obj/ obj/mapgenerator.o
-	$(CC) $(CFLAGS) -o bin/mapgenerator obj/mapgenerator.o
+tests: bin/ lib/tests/tests.o $(LIBS)
+	$(CC) $(CFLAGS) -o bin/tests lib/tests/tests.o $(LIBGTEST) $(LIBS) -lpthread
 
-obj/mapgenerator.o:
-	$(CC) $(CFLAGS) -c src/mapgenerator/main.cpp -o obj/mapgenerator.o
+# Main Libs
+lib/pathfinder.o: lib/ $(LIBS)
+	$(CC) $(CFLAGS) -c src/pathfinder.cpp -o lib/pathfinder.o
+
+lib/mapgenerator.o: lib/ $(LIBS)
+	$(CC) $(CFLAGS) -c src/mapgenerator.cpp -o lib/mapgenerator.o
+
+lib/tests/tests.o: lib/ $(LIBS)
+	$(CC) $(CFLAGS) -c tests/tests.cpp -lpthread -o lib/tests/tests.o
+
+# Libs
+lib/graph.o: lib/
+	$(CC) $(CFLAGS) -c src/graph.cpp -o lib/graph.o
+
+lib/util.o: lib/
+	$(CC) $(CFLAGS) -c src/util.cpp -o lib/util.o
