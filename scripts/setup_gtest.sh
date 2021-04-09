@@ -5,10 +5,6 @@ if [ "$GITHUB_ACTOR" == "nektos/act" ]; then
     echo "Running in 'act' container, not using sudo"
     SUDO=""
 fi
-if [ -f /.dockerenv ]; then
-    echo "Running in 'docker' container, not using sudo"
-    SUDO=""
-fi
 
 echo "Updating packages"
 $SUDO apt-get update
@@ -18,7 +14,7 @@ $SUDO apt-get install -y \
     cmake
 
 echo "Navigate to gtest src"
-$SUDO cd /usr/src/gtest
+cd /usr/src/gtest
 
 echo "Build gtests libraries"
 $SUDO cmake CMakeLists.txt

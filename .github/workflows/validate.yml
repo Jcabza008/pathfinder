@@ -13,8 +13,6 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
-    container:
-      image: catthehacker/ubuntu:act-latest
     steps:
       - name: Setup C++ environment
         uses: kurocha/setup-cpp@v1
@@ -41,8 +39,6 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    container:
-      image: catthehacker/ubuntu:act-latest
     steps:
       - name: Setup C++ environment
         uses: kurocha/setup-cpp@v1
