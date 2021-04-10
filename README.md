@@ -18,7 +18,7 @@ TODO
 
 ### Google Tests:
   - You can run `./scripts/setup_gtest.sh` to install and setup Google Tests.
-  - [How to install Google Tests on Ubuntu](https://www.eriksmistad.no/getting-started-with-google-test-on-ubuntu/). Google Tests libraries should end up at           `/usr/lib/` to be compatible with the existing makefile.
+  - [How to install Google Tests on Ubuntu](https://www.eriksmistad.no/getting-started-with-google-test-on-ubuntu/). Google Tests libraries should end up at `/usr/local/lib/` to be compatible with the existing makefile.
 
 ### Nektos Act
 This repositore contains Github Actions to validate Pull Request. If desired, it is possible to run this workflows locally before pushing you changes; this enables faster feedback.
@@ -52,7 +52,7 @@ The directory structure to be followed is:
 As more libraries are created the Makefile must be updated by adding this library to the `LIBS` variable and by creating the required recipies to build this libraries. Existing recipes for building libraries are at the end of the file and can serve as examples on how to do this.
 
 ## Testing
-We are using the Google Tests testing framework. 
+We are using the Google Tests testing framework.
 ### Structure
 #### Files
 Tests go on the `tests/` directory. An independent `.cpp` will be written for each library, these will have the format `<library_name>_test.cpp`.
@@ -61,4 +61,4 @@ Each tests is defined with the macro:
 ``` c++
 TEST(<Test_Suite>, <Test_Name>)
 ```
-For convention, `<Test_Suite>` should be replaces with the name of the class and `<Test_Name>` will be in the following format `methodName_briefTestDescription`.
+For convention, `<Test_Suite>` should be replaces with the name of the class and `<Test_Name>` will be in the following format `methodName_briefTestDescription`. If the function being tested is not a class member then `<Test_Suite>` should be replaced by the name of the library (eg. `Graph`).
