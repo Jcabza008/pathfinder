@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <algorithm>
+#include <functional>
 #include <list>
 #include <set>
 #include <unordered_map>
@@ -10,6 +11,7 @@
 #include "util.h"
 
 #include "graph_test.cpp"
+#include "priority_queue_test.cpp"
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
