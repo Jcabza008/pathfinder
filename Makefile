@@ -6,7 +6,7 @@ CFLAGS = -g $(LIBSFLAG) $(INCLUDEFLAG)
 LIBS = lib/graph.o lib/util.o
 
 GTEST = gtest-1.7.0/include
-LIBGTEST = /usr/lib/libgtest_main.a /usr/lib/libgtest.a
+LIBGTEST = /usr/local/lib/libgtest_main.a /usr/local/lib/libgtest.a
 
 run_pathfinder: pathfinder
 	./bin/pathfinder

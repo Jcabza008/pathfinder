@@ -22,4 +22,4 @@ $SUDO make
 
 echo "Copy gtest libs to indicated folders"
 $SUDO mkdir -p /usr/lib/
-$SUDO cp -u lib/*.a /usr/lib/
+$SUDO cp -u lib/*.a /usr/local/lib/
