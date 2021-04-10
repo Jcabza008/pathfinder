@@ -1,7 +1,7 @@
 CC = g++
 INCLUDEFLAG = -I include
-LIBFLAG = -L lib
-CFLAGS = -g $(LIBSFLAG) $(INCLUDEFLAG)
+LIBSFLAG = -L lib
+CFLAGS = -g -Wall $(LIBSFLAG) $(INCLUDEFLAG)
 
 LIBS = lib/graph.o lib/util.o
 
