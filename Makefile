@@ -3,7 +3,7 @@ INCLUDEFLAG = -I include
 LIBSFLAG = -L lib
 CFLAGS = -g -Wall $(LIBSFLAG) $(INCLUDEFLAG)
 
-LIBS = lib/graph.o lib/util.o
+LIBS = lib/graph.o lib/util.o lib/priority_queue.o lib/pf_algorithm.o
 
 GTEST = gtest-1.7.0/include
 LIBGTEST = /usr/local/lib/libgtest_main.a /usr/local/lib/libgtest.a
@@ -50,6 +50,12 @@ lib/tests.o: lib/ $(LIBS)
 # Libs
 lib/graph.o: lib/
 	$(CC) $(CFLAGS) -c src/graph.cpp -o lib/graph.o
+
+lib/priority_queue.o: lib/
+	$(CC) $(CFLAGS) -c src/priority_queue.cpp -o lib/priority_queue.o
+
+lib/pf_algorithm.o: lib/
+	$(CC) $(CFLAGS) -c src/pf_algorithm.cpp -o lib/pf_algorithm.o
 
 lib/util.o: lib/
 	$(CC) $(CFLAGS) -c src/util.cpp -o lib/util.o
