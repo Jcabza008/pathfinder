@@ -1,4 +1,3 @@
-SHELL = /usr/bin/bash
 CC = g++
 INCLUDEFLAG = -I include
 LIBSFLAG = -L lib
