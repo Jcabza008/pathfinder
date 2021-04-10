@@ -29,12 +29,13 @@ namespace PATHFINDER
 
     void DirectedGraphLinkedListImpl::addVertex(int id)
     {
-        this->getOrCreateVertex(id);
+        this->getVertex(id, true);
     }
 
     void DirectedGraphLinkedListImpl::addEdge(int from, int to, int weight)
     {
-        auto vertex = this->getOrCreateVertex(from);
+        this->getVertex(to, true); // This will create the vertex `to` if doesn't exists
+        auto vertex = this->getVertex(from, true);
         auto target = this->findTarget(vertex->second, to);
 
         if(target != vertex->second.end())
@@ -45,16 +46,20 @@ namespace PATHFINDER
 
     void DirectedGraphLinkedListImpl::removeVertex(int id)
     {
-        auto vertex = this->getOrCreateVertex(id);
-        this->index.erase(vertex);
+        auto vertex = this->getVertex(id);
+        if(vertex != this->index.end())
+            this->index.erase(vertex);
     }
 
     void DirectedGraphLinkedListImpl::removeEdge(int from, int to)
     {
-        auto vertex = this->getOrCreateVertex(from);
-        auto target = this->findTarget(vertex->second, to);
-        if(target != vertex->second.end())
-            vertex->second.erase(target);
+        auto vertex = this->getVertex(from);
+        if(vertex != this->index.end())
+        {
+            auto target = this->findTarget(vertex->second, to);
+            if(target != vertex->second.end())
+                vertex->second.erase(target);
+        }
     }
 
     std::vector<int> DirectedGraphLinkedListImpl::getVertices()
@@ -68,18 +73,21 @@ namespace PATHFINDER
     std::vector<Target> DirectedGraphLinkedListImpl::getAdjecent(int id)
     {
         std::vector<Target> result;
-        auto vertex = this->getOrCreateVertex(id);
-        for(auto it = vertex->second.cbegin(); it != vertex->second.cend(); it++)
-            result.push_back(*it);
+        auto vertex = this->getVertex(id);
+        if(vertex != this->index.end())
+            for(auto it = vertex->second.cbegin(); it != vertex->second.cend(); it++)
+                result.push_back(*it);
+
         return result;
     }
 
-    std::unordered_map<int, std::list<PATHFINDER::Target>>::iterator DirectedGraphLinkedListImpl::getOrCreateVertex(int id)
+    std::unordered_map<int, std::list<PATHFINDER::Target>>::iterator DirectedGraphLinkedListImpl::getVertex(int id, bool create)
     {
         auto vertex = this->index.find(id);
-        if(vertex == this->index.end())
+        if(vertex == this->index.end() && create)
         {
             this->index.insert({id, {}});
+            vertex = this->index.find(id);
         }
         return vertex;
     }
