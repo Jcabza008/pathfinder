@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <algorithm>
 #include <list>
 #include <set>
 #include <unordered_map>
