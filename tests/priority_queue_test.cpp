@@ -117,3 +117,38 @@ TEST(PriorityQueue, fTest_minManyNumbers)
 
     ASSERT_TRUE(q.empty());
 }
+
+TEST(PriorityQueue, fTest_reorderTest0)
+{
+    PriorityQueue<int*> q(3, [](int* lhs, int* rhs){ return *lhs > *rhs; });
+    ASSERT_TRUE(q.empty());
+    int a, b, c;
+    a = 1;
+    b = 2;
+    c = 3;
+
+    q.push(&a);
+    ASSERT_EQ(q.top(), &a);
+
+    q.push(&c);
+    ASSERT_EQ(q.top(), &c);
+
+    q.push(&b);
+    ASSERT_EQ(q.top(), &c);
+
+    a = 4;
+    b = 5;
+    ASSERT_EQ(q.top(), &c);
+    q.reorder();
+
+    ASSERT_EQ(q.top(), &b);
+    q.pop();
+
+    ASSERT_EQ(q.top(), &a);
+    q.pop();
+
+    ASSERT_EQ(q.top(), &c);
+    q.pop();
+
+    ASSERT_TRUE(q.empty());
+}

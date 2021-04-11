@@ -52,6 +52,15 @@ namespace PATHFINDER
             return !this->size();
         }
 
+        void reorder()
+        {
+            int start = (this->count / 2) / 1;
+            for(auto i = start; i >= 0; i--)
+            {
+                this->heapifyDown(i);
+            }
+        }
+
         private:
         void heapifyUp(int index)
         {
