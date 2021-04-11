@@ -8,6 +8,8 @@ namespace PATHFINDER
         int predecesor;
     };
 
+    bool operator==(const PathData& lhs, const PathData& rhs);
+
     class PF_Algoritm
     {
         public:
