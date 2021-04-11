@@ -1,3 +1,4 @@
+#include <bits/stdc++.h>
 #include <functional>
 #include <list>
 #include <unordered_map>
@@ -9,32 +10,47 @@
 
 namespace PATHFINDER
 {
-    Paths* DijkstrasAlgorithm::FindPaths(DirectedGraph* graph, int start)
+    std::unordered_map<int, PathData> DijkstrasAlgorithm::findPaths(DirectedGraph* graph, int start)
     {
         auto vertices = graph->getVertices();
-        PriorityQueue<DijkstrasAlgorithm::Vertex> queue(vertices.size());
+        std::unordered_map<int, bool> visited;
+        std::unordered_map<int, PathData> paths;
+        PriorityQueue<VertexData> queue(vertices.size(),
+            [](VertexData lhs, VertexData rhs){
+                return lhs.data->cost < rhs.data->cost;
+            });
+
         for(auto it = vertices.cbegin(); it != vertices.cend(); it++)
         {
+            auto cost = INT_MAX;
             if(*it == start)
+                cost = 0;
+
+            paths.insert({*it, PathData{cost, -1}});
+            queue.push({*it, &paths[*it]});
+        }
+
+        while(!queue.empty())
+        {
+            queue.reorder();
+            auto vertex = queue.top();
+            queue.pop();
+            visited[vertex.index] = true;
+
+            auto neighbors = graph->getAdjecent(vertex.index);
+            for(auto it = neighbors.cbegin(); it != neighbors.cend(); it++)
             {
-                queue.push({0, -1});
-            }
-            else
-            {
-                queue.push({UINT32_MAX, -1});
+                if(visited[it->to])
+                    continue;
+
+                if(vertex.data->cost + it->weight < paths[it->to].cost)
+                {
+                    paths[it->to].cost = vertex.data->cost + it->weight;
+                    paths[it->to].predecesor = vertex.index;
+                }
             }
         }
 
-        return nullptr;
-    }
-
-    bool operator>(const DijkstrasAlgorithm::Vertex& lhs, const DijkstrasAlgorithm::Vertex& rhs)
-    {
-        return lhs.distance > rhs.distance;
-    }
-
-    bool operator<(const DijkstrasAlgorithm::Vertex& lhs, const DijkstrasAlgorithm::Vertex& rhs)
-    {
-        return lhs.distance < rhs.distance;
+        return paths;
     }
 }

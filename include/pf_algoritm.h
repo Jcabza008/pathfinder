@@ -2,15 +2,10 @@
 
 namespace PATHFINDER
 {
-    /**
-     * @brief A path object provide the interface to a set of paths
-     *        with a common starting point
-     */
-    class Paths
+    struct PathData
     {
-        virtual int GetStart() = 0;
-        virtual int GetTargets() = 0;
-        virtual std::vector<int> GetPath(int target) = 0;
+        int cost;
+        int predecesor;
     };
 
     class PF_Algoritm
@@ -21,9 +16,9 @@ namespace PATHFINDER
          *        to all other vertices in the graph
          * @param graph an DirectedGraph
          * @param start the ID of the vertex to use as start
-         * @return a Paths object
+         * @return a map from the vertices to the cost and predecesors
          */
-        virtual Paths* FindPaths(DirectedGraph* graph, int start) = 0;
+        virtual std::unordered_map<int, PathData> findPaths(DirectedGraph* graph, int start) = 0;
     };
 
     class DijkstrasAlgorithm : PF_Algoritm
@@ -39,18 +34,15 @@ namespace PATHFINDER
          *        to all other vertices in the graph
          * @param graph an DirectedGraph
          * @param start the ID of the vertex to use as start
-         * @return a Paths object
+         * @return a map from the vertices to the cost and predecesors
          */
-        virtual Paths* FindPaths(DirectedGraph* graph, int start) override;
+        virtual std::unordered_map<int, PathData> findPaths(DirectedGraph* graph, int start) override;
 
-        struct Vertex
+        private:
+        struct VertexData
         {
-            uint32_t distance;
-            int32_t predecesor;
+            int index;
+            PathData* data;
         };
-
     };
-
-    bool operator>(const DijkstrasAlgorithm::Vertex& lhs, const DijkstrasAlgorithm::Vertex& rhs);
-    bool operator<(const DijkstrasAlgorithm::Vertex& lhs, const DijkstrasAlgorithm::Vertex& rhs);
 }

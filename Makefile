@@ -7,6 +7,7 @@ LIBS = lib/graph.o lib/util.o lib/priority_queue.o lib/pf_algorithm.o
 
 GTEST = gtest-1.7.0/include
 LIBGTEST = /usr/local/lib/libgtest_main.a /usr/local/lib/libgtest.a
+LIBGMOCK = /usr/local/lib/libgmock_main.a /usr/local/lib/libgmock.a
 
 run_clang_tidy:
 	clang-tidy -checks=cppcoreguidelines-* --warnings-as-errors=* -header-filter=.* src/* -- $(CFLAGS)
@@ -38,7 +39,7 @@ mapgenerator: bin/ lib/mapgenerator.o $(LIBS)
 	$(CC) $(CFLAGS) -o bin/mapgenerator lib/mapgenerator.o
 
 tests: bin/ lib/tests.o $(LIBS)
-	$(CC) $(CFLAGS) -o bin/tests lib/tests.o $(LIBGTEST) $(LIBS) -lpthread
+	$(CC) $(CFLAGS) -o bin/tests lib/tests.o $(LIBGTEST) $(LIBGMOCK) $(LIBS) -lpthread
 
 # Main Libs
 lib/pathfinder.o: lib/ $(LIBS)
