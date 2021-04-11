@@ -10,6 +10,11 @@
 
 namespace PATHFINDER
 {
+    bool operator==(const PathData& lhs, const PathData& rhs)
+    {
+        return lhs.cost == rhs.cost && lhs.predecesor == rhs.predecesor;
+    }
+
     std::unordered_map<int, PathData> DijkstrasAlgorithm::findPaths(DirectedGraph* graph, int start)
     {
         auto vertices = graph->getVertices();
