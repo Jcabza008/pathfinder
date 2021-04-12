@@ -1,6 +1,6 @@
 #pragma once
 
-namespace PATHFINDER
+namespace pathfinder
 {
     struct PathData
     {

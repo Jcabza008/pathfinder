@@ -1,6 +1,6 @@
 #pragma once
 
-namespace PATHFINDER
+namespace pathfinder
 {
     /**
      * @brief Checks that two vectors contain the same elements

@@ -29,6 +29,8 @@
             "ostream": "cpp",
             "sstream": "cpp",
             "streambuf": "cpp"
+            "thread": "cpp",
+            "iosfwd": "cpp"
         },
         "C_Cpp.default.includePath": [
             "include"

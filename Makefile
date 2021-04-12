@@ -1,16 +1,16 @@
 CC = g++
 INCLUDEFLAG = -I include
 LIBSFLAG = -L lib
-CFLAGS = -g -Wall $(LIBSFLAG) $(INCLUDEFLAG)
+CFLAGS = -g -Wall -std=c++14 $(LIBSFLAG) $(INCLUDEFLAG)
 
-LIBS = lib/graph.o lib/util.o lib/priority_queue.o lib/pf_algorithm.o
+LIBS = lib/log.o lib/graph.o lib/util.o lib/priority_queue.o lib/pf_algorithm.o
 
 GTEST = gtest-1.7.0/include
 LIBGTEST = /usr/local/lib/libgtest_main.a /usr/local/lib/libgtest.a
 LIBGMOCK = /usr/local/lib/libgmock_main.a /usr/local/lib/libgmock.a
 
 run_clang_tidy:
-	clang-tidy -checks=cppcoreguidelines-* --warnings-as-errors=* -header-filter=.* src/* -- $(CFLAGS)
+	clang-tidy -checks=cppcoreguidelines-* --warnings-as-errors=* -header-filter=.* src/* -- $(CFLAGS) -DCLANG_TIDY
 
 run_pathfinder: pathfinder
 	./bin/pathfinder
@@ -52,6 +52,9 @@ lib/tests.o: lib/ $(LIBS)
 	$(CC) $(CFLAGS) -c tests/tests.cpp -lpthread -o lib/tests.o
 
 # Libs
+lib/log.o: lib/
+	$(CC) $(CFLAGS) -c src/log.cpp -o lib/log.o
+
 lib/graph.o: lib/
 	$(CC) $(CFLAGS) -c src/graph.cpp -o lib/graph.o
 
