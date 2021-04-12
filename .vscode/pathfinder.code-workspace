@@ -17,7 +17,10 @@
         "files.associations": {
             "iostream": "cpp",
             "*.tcc": "cpp",
-            "list": "cpp"
+            "list": "cpp",
+            "iomanip": "cpp",
+            "thread": "cpp",
+            "iosfwd": "cpp"
         },
         "C_Cpp.default.includePath": [
             "include"
