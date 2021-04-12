@@ -5,7 +5,7 @@
 #include "graph.h"
 #include "util.h"
 
-using namespace PATHFINDER;
+using namespace pathfinder;
 
 TEST(UndirectedGraphLinkedListImpl, addVertex_singleVertex)
 {

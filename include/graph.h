@@ -1,6 +1,6 @@
 #pragma once
 
-namespace PATHFINDER
+namespace pathfinder
 {
     /**
      * @brief Target describes an endpoint and a weight
@@ -107,8 +107,8 @@ namespace PATHFINDER
         std::vector<Target> getAdjecent(int id) override;
 
         private:
-        std::unordered_map<int, std::list<PATHFINDER::Target>>::iterator getVertex(int id, bool create = false);
-        std::_List_iterator<PATHFINDER::Target> findTarget(std::list<Target>& list, int to);
+        std::unordered_map<int, std::list<Target>>::iterator getVertex(int id, bool create = false);
+        std::_List_iterator<Target> findTarget(std::list<Target>& list, int to);
 
         std::unordered_map<int, std::list<Target>> index;
     };

@@ -5,7 +5,7 @@
 
 #include "graph.h"
 
-namespace PATHFINDER
+namespace pathfinder
 {
     DirectedGraphLinkedListImpl::DirectedGraphLinkedListImpl(std::vector<Edge> edges)
     {
@@ -81,7 +81,7 @@ namespace PATHFINDER
         return result;
     }
 
-    std::unordered_map<int, std::list<PATHFINDER::Target>>::iterator DirectedGraphLinkedListImpl::getVertex(int id, bool create)
+    std::unordered_map<int, std::list<Target>>::iterator DirectedGraphLinkedListImpl::getVertex(int id, bool create)
     {
         auto vertex = this->index.find(id);
         if(vertex == this->index.end() && create)
@@ -92,7 +92,7 @@ namespace PATHFINDER
         return vertex;
     }
 
-    std::_List_iterator<PATHFINDER::Target> DirectedGraphLinkedListImpl::findTarget(std::list<Target>& list, int to)
+    std::_List_iterator<Target> DirectedGraphLinkedListImpl::findTarget(std::list<Target>& list, int to)
     {
         for(auto it = list.begin(); it != list.end(); it++)
         {
