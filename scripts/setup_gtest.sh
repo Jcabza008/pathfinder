@@ -8,18 +8,14 @@ fi
 
 echo "Updating packages"
 $SUDO apt-get update
-echo "Install gtests and cmake"
+
+echo "Install gtests and gmock"
 $SUDO apt-get install -y \
     libgtest-dev \
-    cmake
+    libgmock-dev
 
-echo "Navigate to gtest src"
-cd /usr/src/gtest
-
-echo "Build gtests libraries"
-$SUDO cmake CMakeLists.txt
-$SUDO make
-
-echo "Copy gtest libs to indicated folders"
-$SUDO mkdir -p /usr/lib/
-$SUDO cp -u lib/*.a /usr/local/lib/
+echo "Copy libs to /usr/local/lib"
+$SUDO cp -u /usr/lib/x86_64-linux-gnu/libgtest.a      /usr/local/lib/
+$SUDO cp -u /usr/lib/x86_64-linux-gnu/libgtest_main.a /usr/local/lib/
+$SUDO cp -u /usr/lib/x86_64-linux-gnu/libgmock.a      /usr/local/lib/
+$SUDO cp -u /usr/lib/x86_64-linux-gnu/libgmock_main.a /usr/local/lib/

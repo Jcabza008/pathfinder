@@ -18,7 +18,17 @@
             "iostream": "cpp",
             "*.tcc": "cpp",
             "list": "cpp",
+            "array": "cpp",
+            "string": "cpp",
+            "string_view": "cpp",
+            "vector": "cpp",
+            "functional": "cpp",
             "iomanip": "cpp",
+            "istream": "cpp",
+            "limits": "cpp",
+            "ostream": "cpp",
+            "sstream": "cpp",
+            "streambuf": "cpp"
             "thread": "cpp",
             "iosfwd": "cpp"
         },
