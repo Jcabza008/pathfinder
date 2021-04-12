@@ -8,7 +8,7 @@
 #include "pf_algoritm.h"
 #include "priority_queue.h"
 
-namespace PATHFINDER
+namespace pathfinder
 {
     bool operator==(const PathData& lhs, const PathData& rhs)
     {

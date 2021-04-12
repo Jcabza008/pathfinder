@@ -1,6 +1,6 @@
 #pragma once
 
-namespace PATHFINDER
+namespace pathfinder
 {
     template <typename T>
     class PriorityQueue
@@ -66,9 +66,9 @@ namespace PATHFINDER
             auto right = 2 * index + 2;
             int largest = index;
 
-            if(left < this->size() && this->comparator(this->data[left], this->data[largest]))
+            if(left < (int)this->size() && this->comparator(this->data[left], this->data[largest]))
                 largest = left;
-            if(right < this->size() && this->comparator(this->data[right], this->data[largest]))
+            if(right < (int)this->size() && this->comparator(this->data[right], this->data[largest]))
                 largest = right;
 
             if(index != largest)
