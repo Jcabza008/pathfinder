@@ -10,6 +10,29 @@ on:
   workflow_dispatch:
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup C++ environment
+        uses: kurocha/setup-cpp@v1
+
+      - name: Setup Git
+        run: git config --global url."https://${{ secrets.ACCESS_TOKEN }}:@github.com/".insteadOf "https://github.com"
+
+      - name: Check out code
+        uses: actions/checkout@v1
+
+      - name: 'Make all scripts executable'
+        run: |
+          chmod +x scripts/*
+
+      - name: Setup Env
+        run: scripts/setup_ubuntu_env.sh
+
+      - name: Run Clang Tidy
+        run: make run_clang_tidy
+
   test:
     name: Test
     runs-on: ubuntu-latest

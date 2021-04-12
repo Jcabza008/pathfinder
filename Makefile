@@ -8,6 +8,9 @@ LIBS = lib/graph.o lib/util.o
 GTEST = gtest-1.7.0/include
 LIBGTEST = /usr/local/lib/libgtest_main.a /usr/local/lib/libgtest.a
 
+run_clang_tidy:
+	clang-tidy -checks=cppcoreguidelines-* --warnings-as-errors=* -header-filter=.* src/* -- $(CFLAGS)
+
 run_pathfinder: pathfinder
 	./bin/pathfinder
 
