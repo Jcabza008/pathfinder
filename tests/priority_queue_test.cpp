@@ -3,7 +3,7 @@
 
 #include "priority_queue.h"
 
-using namespace PATHFINDER;
+using namespace pathfinder;
 
 TEST(PriorityQueue, fTest_minBehavior)
 {

@@ -10,7 +10,7 @@
 #include "pf_algoritm.h"
 #include "priority_queue.h"
 
-using namespace PATHFINDER;
+using namespace pathfinder;
 using ::testing::Invoke;
 using ::testing::Return;
 using ::testing::_;
