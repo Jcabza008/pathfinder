@@ -31,7 +31,7 @@ namespace PATHFINDER
             this->heapifyDown(0);
         }
 
-        uint16_t size()
+        size_t size()
         {
             return this->data.size();
         }
