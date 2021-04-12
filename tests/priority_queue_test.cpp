@@ -7,7 +7,7 @@ using namespace PATHFINDER;
 
 TEST(PriorityQueue, fTest_minBehavior)
 {
-    PriorityQueue<int> q(5);
+    PriorityQueue<int> q;
     ASSERT_TRUE(q.empty());
 
     q.push(3);
@@ -25,7 +25,7 @@ TEST(PriorityQueue, fTest_minBehavior)
 
 TEST(PriorityQueue, fTest_minComplexBehavior)
 {
-    PriorityQueue<int> q(5);
+    PriorityQueue<int> q;
     ASSERT_TRUE(q.empty());
 
     q.push(3);
@@ -52,7 +52,7 @@ TEST(PriorityQueue, fTest_minComplexBehavior)
 
 TEST(PriorityQueue, fTest_maxBehavior)
 {
-    PriorityQueue<int> q(5, [](int lhs, int rhs){ return lhs > rhs; });
+    PriorityQueue<int> q([](int lhs, int rhs){ return lhs > rhs; });
     ASSERT_TRUE(q.empty());
 
     q.push(3);
@@ -70,7 +70,7 @@ TEST(PriorityQueue, fTest_maxBehavior)
 
 TEST(PriorityQueue, fTest_maxComplexBehavior)
 {
-    PriorityQueue<int> q(5, [](int lhs, int rhs){ return lhs > rhs; });
+    PriorityQueue<int> q([](int lhs, int rhs){ return lhs > rhs; });
     ASSERT_TRUE(q.empty());
 
     q.push(3);
@@ -97,7 +97,7 @@ TEST(PriorityQueue, fTest_maxComplexBehavior)
 
 TEST(PriorityQueue, fTest_minManyNumbers)
 {
-    PriorityQueue<int> q(100);
+    PriorityQueue<int> q;
     std::vector<int> v = {42, 24, 99, 95, 93, 20, 63, 21, 37, 71, 16,  1, 77, 59, 27, 19, 23, 52, 38, 50,
                         57,  8, 61, 11, 81,  7, 35,  4, 30, 29, 91, 18, 14, 56, 64, 68, 47, 62, 97, 44,
                         85, 92, 79, 89, 33, 65, 87, 67, 45, 10, 88, 98, 54, 82, 94, 73, 53, 66, 60, 17,
@@ -120,7 +120,7 @@ TEST(PriorityQueue, fTest_minManyNumbers)
 
 TEST(PriorityQueue, fTest_reorderTest0)
 {
-    PriorityQueue<int*> q(3, [](int* lhs, int* rhs){ return *lhs > *rhs; });
+    PriorityQueue<int*> q([](int* lhs, int* rhs){ return *lhs > *rhs; });
     ASSERT_TRUE(q.empty());
     int a, b, c;
     a = 1;

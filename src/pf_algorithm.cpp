@@ -15,12 +15,12 @@ namespace PATHFINDER
         return lhs.cost == rhs.cost && lhs.predecesor == rhs.predecesor;
     }
 
-    std::unordered_map<int, PathData> DijkstrasAlgorithm::findPaths(DirectedGraph* graph, int start)
+    std::unordered_map<int, PathData> DijkstrasAlgorithm::findPaths(Graph* graph, int start)
     {
         auto vertices = graph->getVertices();
         std::unordered_map<int, bool> visited;
         std::unordered_map<int, PathData> paths;
-        PriorityQueue<VertexData> queue(vertices.size(),
+        PriorityQueue<VertexData> queue(
             [](VertexData lhs, VertexData rhs){
                 return lhs.data->cost < rhs.data->cost;
             });

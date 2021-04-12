@@ -15,22 +15,16 @@ using ::testing::Invoke;
 using ::testing::Return;
 using ::testing::_;
 
-class MockDirectedGraph : public DirectedGraph
+class MockGraph : public Graph
 {
     public:
     MOCK_METHOD0(getVertices, std::vector<int>());
     MOCK_METHOD1(getAdjecent, std::vector<Target>(int id));
-
-    // Not Used
-    MOCK_METHOD1(addVertex, void(int));
-    MOCK_METHOD3(addEdge, void(int, int, int));
-    MOCK_METHOD1(removeVertex, void(int));
-    MOCK_METHOD2(removeEdge, void(int, int));
 };
 
 TEST(DijkstrasAlgorithm, findPaths_singleVertices)
 {
-    MockDirectedGraph graph;
+    MockGraph graph;
     std::vector<int> vertices = {0};
     std::unordered_map<int, std::vector<Target>> adjTable;
     adjTable.insert({0, { }});
@@ -48,7 +42,7 @@ TEST(DijkstrasAlgorithm, findPaths_singleVertices)
 
 TEST(DijkstrasAlgorithm, findPaths_noVertices)
 {
-    MockDirectedGraph graph;
+    MockGraph graph;
     std::vector<int> vertices = {};
     std::unordered_map<int, std::vector<Target>> adjTable;
 
@@ -65,7 +59,7 @@ TEST(DijkstrasAlgorithm, findPaths_noVertices)
 
 TEST(DijkstrasAlgorithm, findPaths_severalVerticesDirected0)
 {
-    MockDirectedGraph graph;
+    MockGraph graph;
     std::vector<int> vertices = {0, 1, 2, 3, 4, 5, 6};
     std::unordered_map<int, std::vector<Target>> adjTable;
     adjTable.insert({0, { Target{1, 4}, Target{6, 10} }});
@@ -95,7 +89,7 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesDirected0)
 
 TEST(DijkstrasAlgorithm, findPaths_severalVerticesDirected1)
 {
-    MockDirectedGraph graph;
+    MockGraph graph;
     std::vector<int> vertices = {0, 1, 3, 4, 5, 6, 8, 10};
     std::unordered_map<int, std::vector<Target>> adjTable;
     adjTable.insert({ 0, { Target{1,  2}, Target{5, 10} }});
@@ -127,7 +121,7 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesDirected1)
 
 TEST(DijkstrasAlgorithm, findPaths_severalVerticesUndirected0)
 {
-    MockDirectedGraph graph;
+    MockGraph graph;
     std::vector<int> vertices = {0, 1, 2, 3, 4, 5};
     std::unordered_map<int, std::vector<Target>> adjTable;
     adjTable.insert({ 0, { Target{1,  1}, Target{2,  5} }});
@@ -155,7 +149,7 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesUndirected0)
 
 TEST(DijkstrasAlgorithm, findPaths_severalVerticesUndirected1)
 {
-    MockDirectedGraph graph;
+    MockGraph graph;
     std::vector<int> vertices = {0, 1, 3, 4, 5, 6, 8, 10};
     std::unordered_map<int, std::vector<Target>> adjTable;
     adjTable.insert({ 0, { Target{1,  2}, Target{5, 10} }});

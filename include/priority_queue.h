@@ -6,55 +6,44 @@ namespace PATHFINDER
     class PriorityQueue
     {
         public:
-        PriorityQueue(uint16_t _capacity, std::function<bool(T, T)> _comparator = [](T lhs, T rhs){ return lhs < rhs; })
-            : count(0), capacity(_capacity), comparator(_comparator)
-        {
-            this->data = new T[this->capacity];
-        }
-
-        ~PriorityQueue()
-        {
-            delete[] this->data;
-        }
+        PriorityQueue(std::function<bool(T, T)> _comparator = [](T lhs, T rhs){ return lhs < rhs; })
+            : comparator(_comparator) {}
 
         bool push(T element)
         {
-            if(this->count == this->capacity)
-                return false;
-
-            this->data[this->count] = element;
-            heapifyUp(this->count);
-            this->count++;
+            this->data.push_back(element);
+            heapifyUp(this->size() - 1);
             return true;
         }
 
         T top()
         {
-            return this->data[0];
+            return this->data[0]; //TODO: throw if empty
         }
 
         void pop()
         {
-            if(!this->count)
+            if(this->empty()) //TODO: throw if empty
                 return;
 
-            this->data[0] = this->data[--this->count];
+            this->data[0] = this->data[this->size() - 1];
+            this->data.pop_back();
             this->heapifyDown(0);
         }
 
         uint16_t size()
         {
-            return this->count;
+            return this->data.size();
         }
 
         bool empty()
         {
-            return !this->size();
+            return this->data.empty();
         }
 
         void reorder()
         {
-            int start = (this->count / 2) / 1;
+            int start = (this->size() / 2) / 1;
             for(auto i = start; i >= 0; i--)
             {
                 this->heapifyDown(i);
@@ -77,9 +66,9 @@ namespace PATHFINDER
             auto right = 2 * index + 2;
             int largest = index;
 
-            if(left < this->count && this->comparator(this->data[left], this->data[largest]))
+            if(left < this->size() && this->comparator(this->data[left], this->data[largest]))
                 largest = left;
-            if(right < this->count && this->comparator(this->data[right], this->data[largest]))
+            if(right < this->size() && this->comparator(this->data[right], this->data[largest]))
                 largest = right;
 
             if(index != largest)
@@ -89,9 +78,7 @@ namespace PATHFINDER
             }
         }
 
-        T* data;
-        uint16_t count;
-        uint16_t capacity;
         std::function<bool(T, T)> comparator;
+        std::vector<T> data;
     };
 }
