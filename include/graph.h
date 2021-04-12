@@ -11,47 +11,18 @@ namespace PATHFINDER
     };
 
     /**
-     * @brief Directed Edge is a Target with a starting point
+     * @brief Edge is a Target with a starting point
      */
-    struct DirectedEdge : public Target {
+    struct Edge : public Target {
         int from;
     };
 
     /**
-     * @brief Abstract class that defined the interface of a directed graph
+     * @brief Abstract class that defined the interface of a graph
      */
-    class DirectedGraph
+    class Graph
     {
         public:
-
-        /**
-         * @brief Adds a vertex to the graph
-         * @param id integer that uniquely identifies this vertex
-         */
-        virtual void addVertex(int id) = 0;
-
-        /**
-         * @brief Adds an edge to the graph. If any of the two endpoint in the
-         *        graph does not exist we create it.
-         * @param from id of starting vertex
-         * @param to id of target vertex
-         * @param weight weight of edge
-         */
-        virtual void addEdge(int from, int to, int weight) = 0;
-
-        /**
-         * @brief Removed the vertex with the indicated id
-         * @param id the id of vertex to be removed
-         */
-        virtual void removeVertex(int id) = 0;
-
-        /**
-         * @brief Removes an edge from the graph
-         * @param from starting vertex
-         * @param to target vertex
-         */
-        virtual void removeEdge(int from, int to) = 0;
-
         /**
          * @brief Get a list of vertices
          * @return std::vector<int> list of vetices
@@ -63,13 +34,13 @@ namespace PATHFINDER
          * @param id vertex id
          * @return vector of ids of adjecent vertices
          */
-        virtual std::vector<Target> getAdjecent(int id) = 0;
+        virtual std::vector<Target> getAdjecent(int index) = 0;
     };
 
     /**
      * @brief Implementation of a directed graph using a linked list
      */
-    class DirectedGraphLinkedListImpl : public DirectedGraph
+    class DirectedGraphLinkedListImpl : public Graph
     {
         public:
         /**
@@ -84,7 +55,7 @@ namespace PATHFINDER
          *        that vertex is not going to be created.
          * @param edges
          */
-        DirectedGraphLinkedListImpl(std::vector<DirectedEdge> edges);
+        DirectedGraphLinkedListImpl(std::vector<Edge> edges);
 
         /**
          * @brief Construct a new Directed Graph Linked List Impl object
@@ -92,13 +63,13 @@ namespace PATHFINDER
          * @param vertices
          * @param edges
          */
-        DirectedGraphLinkedListImpl(std::vector<int> vertices, std::vector<DirectedEdge> edges = {});
+        DirectedGraphLinkedListImpl(std::vector<int> vertices, std::vector<Edge> edges = {});
 
         /**
          * @brief Adds a vertex to the graph
          * @param id integer that uniquely identifies this vertex
          */
-        virtual void addVertex(int id) override;
+        void addVertex(int id);
 
         /**
          * @brief Adds an edge to the graph. If any of the two endpoint in the
@@ -107,33 +78,33 @@ namespace PATHFINDER
          * @param to id of target vertex
          * @param weight weight of edge
          */
-        virtual void addEdge(int from, int to, int weight) override;
+        void addEdge(int from, int to, int weight);
 
         /**
          * @brief Removed the vertex with the indicated id
          * @param id the id of vertex to be removed
          */
-        virtual void removeVertex(int id) override;
+        void removeVertex(int id);
 
         /**
          * @brief Removes an edge from the graph
          * @param from starting vertex
          * @param to target vertex
          */
-        virtual void removeEdge(int from, int to) override;
+        void removeEdge(int from, int to);
 
         /**
          * @brief Get a list of vertices
          * @return std::vector<int> list of vetices
          */
-        virtual std::vector<int> getVertices();
+        std::vector<int> getVertices() override;
 
         /**
          * @brief Get the adjecent vertices
          * @param id vertex id
          * @return vector of ids of adjecent vertices
          */
-        virtual std::vector<Target> getAdjecent(int id) override;
+        std::vector<Target> getAdjecent(int id) override;
 
         private:
         std::unordered_map<int, std::list<PATHFINDER::Target>>::iterator getVertex(int id, bool create = false);
@@ -145,6 +116,6 @@ namespace PATHFINDER
     bool operator==(const Target& lhs, const Target& rhs);
     bool operator<(const Target& lhs, const Target& rhs);
 
-    bool operator==(const DirectedEdge& lhs, const DirectedEdge& rhs);
-    bool operator<(const DirectedEdge& lhs, const DirectedEdge& rhs);
+    bool operator==(const Edge& lhs, const Edge& rhs);
+    bool operator<(const Edge& lhs, const Edge& rhs);
 }
