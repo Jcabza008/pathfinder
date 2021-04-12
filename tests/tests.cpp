@@ -10,7 +10,7 @@
 
 #include "graph.h"
 #include "util.h"
-#include "pf_algoritm.h"
+#include "algorithms.h"
 
 #include "graph_test.cpp"
 #include "priority_queue_test.cpp"

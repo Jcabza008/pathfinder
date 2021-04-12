@@ -1,22 +1,7 @@
-#ifndef CLANG_TIDY
-
-#include <atomic>
-#include <string>
-#include <ostream>
-#include <vector>
-#include <mutex>
-#include <chrono>
-#include <ctime>
-#include <iomanip>
-#include <map>
-#include <sstream>
-#include <utility>
-#include <thread>
-
 #include "log.h"
 
-namespace pathfinder
-{
+namespace pathfinder {
+
     constexpr char c_ISO8601_time[] = "%H:%M:%S";
 
     static const std::map<LogLevel, std::string> c_LevelString
@@ -142,6 +127,5 @@ namespace pathfinder
         auto cut = path.find_last_of("\\/") + 1;
         return path.substr(cut);
     }
-}
 
-#endif
+}

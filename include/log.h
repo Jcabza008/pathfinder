@@ -1,5 +1,18 @@
 #pragma once
 
+#include <atomic>
+#include <string>
+#include <ostream>
+#include <vector>
+#include <mutex>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
+#include <map>
+#include <sstream>
+#include <utility>
+#include <thread>
+
 #define pf_log(level, message) pathfinder::Logger::Get().log(level, message, __FILE__, __LINE__)
 #define pf_log_info(message) pathfinder::Logger::Get().info(message, __FILE__, __LINE__)
 
@@ -20,8 +33,7 @@
 #define pf_log_error(message) pathfinder::Logger::Get().error(message, __FILE__, __LINE__, __func__)
 #endif
 
-namespace pathfinder
-{
+namespace pathfinder {
 
 	enum class LogLevel : size_t
 	{
@@ -78,4 +90,5 @@ namespace pathfinder
 		std::mutex m_mutex;
 		bool m_showThreadId;
 	};
+
 }
