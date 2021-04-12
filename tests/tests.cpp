@@ -1,4 +1,3 @@
-#include <gtest/gtest.h>
 #include <algorithm>
 #include <bits/stdc++.h>
 #include <functional>
@@ -8,6 +7,7 @@
 #include <utility>
 #include <vector>
 
+#include <gtest/gtest.h>
 #include "graph.h"
 #include "util.h"
 #include "algorithms.h"
