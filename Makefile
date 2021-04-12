@@ -1,8 +1,4 @@
 CC = g++
-ifeq ($(UNAME_S),Darwin)
-	CC = g++-10
-endif
-
 INCLUDEFLAG = -I include
 LIBSFLAG = -L lib
 CFLAGS = -g -Wall $(LIBSFLAG) $(INCLUDEFLAG)
