@@ -30,8 +30,10 @@ $SUDO apt update
 
 echo "Installing packages:"
 $SUDO apt install -y    \
+    pkg-config \
     cpp  \
     build-essential  \
+    libsfml-dev \
     clang-tidy \
     tree
 

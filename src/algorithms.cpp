@@ -5,11 +5,11 @@
 #include <vector>
 
 #include "graph.h"
-#include "pf_algoritm.h"
+#include "algorithms.h"
 #include "priority_queue.h"
 
-namespace pathfinder
-{
+namespace pathfinder {
+
     bool operator==(const PathData& lhs, const PathData& rhs)
     {
         return lhs.cost == rhs.cost && lhs.predecesor == rhs.predecesor;
@@ -58,4 +58,5 @@ namespace pathfinder
 
         return paths;
     }
+
 }

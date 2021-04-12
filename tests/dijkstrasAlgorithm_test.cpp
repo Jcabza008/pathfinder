@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "graph.h"
-#include "pf_algoritm.h"
+#include "algorithms.h"
 #include "priority_queue.h"
 
 using namespace pathfinder;

@@ -1,7 +1,7 @@
 #pragma once
 
-namespace pathfinder
-{
+namespace pathfinder {
+
     struct PathData
     {
         int cost;
@@ -47,4 +47,5 @@ namespace pathfinder
             PathData* data;
         };
     };
+
 }
