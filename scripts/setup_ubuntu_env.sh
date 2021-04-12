@@ -32,6 +32,7 @@ echo "Installing packages:"
 $SUDO apt install -y    \
     cpp  \
     build-essential  \
+    clang-tidy \
     tree
 
 echo "Dumping working tree structure:"
