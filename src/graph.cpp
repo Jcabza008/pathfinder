@@ -7,7 +7,7 @@
 
 namespace PATHFINDER
 {
-    DirectedGraphLinkedListImpl::DirectedGraphLinkedListImpl(std::vector<DirectedEdge> edges)
+    DirectedGraphLinkedListImpl::DirectedGraphLinkedListImpl(std::vector<Edge> edges)
     {
         for(auto it = edges.cbegin(); it != edges.cend(); it++)
         {
@@ -15,7 +15,7 @@ namespace PATHFINDER
         }
     }
 
-    DirectedGraphLinkedListImpl::DirectedGraphLinkedListImpl(std::vector<int> vertices, std::vector<DirectedEdge> edges)
+    DirectedGraphLinkedListImpl::DirectedGraphLinkedListImpl(std::vector<int> vertices, std::vector<Edge> edges)
     {
         for(auto it = vertices.cbegin(); it != vertices.cend(); it++)
         {
@@ -115,14 +115,14 @@ namespace PATHFINDER
         return lhs.to < rhs.to;
     }
 
-    bool operator==(const DirectedEdge& lhs, const DirectedEdge& rhs)
+    bool operator==(const Edge& lhs, const Edge& rhs)
     {
         return lhs.from   == rhs.from &&
                lhs.to     == rhs.to   &&
                lhs.weight == rhs.weight;
     }
 
-    bool operator<(const DirectedEdge& lhs, const DirectedEdge& rhs)
+    bool operator<(const Edge& lhs, const Edge& rhs)
     {
         return lhs.to < rhs.to;
     }
