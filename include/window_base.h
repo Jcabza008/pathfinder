@@ -12,7 +12,7 @@ namespace pathfinder { namespace view {
 
 		virtual ~WindowBase();
 
-		sf::RenderWindow& window();
+		sf::RenderWindow& getWindow();
 
 		WindowBase& create(sf::VideoMode,
 			const sf::String&,
@@ -26,8 +26,8 @@ namespace pathfinder { namespace view {
 		virtual void onClose();
 
 	protected:
-		sf::RenderWindow m_window;
-		std::thread m_pump_thread;
+		sf::RenderWindow window;
+		std::thread pump_thread;
 
 	private:
 		void pump();

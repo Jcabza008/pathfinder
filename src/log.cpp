@@ -27,23 +27,23 @@ namespace pathfinder {
 
     Logger& Logger::showThreadId(bool use)
     {
-        adcquire_lock lock(m_mutex);
+        adcquire_lock lock(mutex);
         m_showThreadId = use;
         return *this;
     }
 
     Logger& Logger::addStream(std::ostream& os, LogLevel level)
     {
-        adcquire_lock lock(m_mutex);
-        m_streams.push_back({ level, os });
+        adcquire_lock lock(mutex);
+        streams.push_back({ level, os });
         return *this;
     }
 
     void Logger::log(LogLevel level, str_t message, strp_t file, int line, strp_t function)
     {
         auto timestamp = now();
-        adcquire_lock lock(m_mutex);
-        for (auto& stream : m_streams)
+        adcquire_lock lock(mutex);
+        for (auto& stream : streams)
             log(stream, timestamp, level, message, file, line, function);
     }
 

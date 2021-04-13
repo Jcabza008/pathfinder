@@ -8,10 +8,10 @@
 
 namespace pathfinder { namespace view {
 
-	void* ComponentBase::m_lastClicked;
+	void* ComponentBase::lastClicked;
 
 	ComponentBase::ComponentBase(const sf::Rect<dimension_t>& canvas)
-		: m_canvas(canvas)
+		: canvas(canvas)
 	{
 	}
 
@@ -20,24 +20,24 @@ namespace pathfinder { namespace view {
 	{
 	}
 
-	sf::Rect<ComponentBase::dimension_t> ComponentBase::canvas()
+	sf::Rect<ComponentBase::dimension_t> ComponentBase::getCanvas()
 	{
-		return m_canvas;
+		return canvas;
 	}
 
 	sf::Vector2<ComponentBase::dimension_t> ComponentBase::location()
 	{
-		return { m_canvas.left, m_canvas.top };
+		return { canvas.left, canvas.top };
 	}
 
 	sf::Vector2<ComponentBase::dimension_t> ComponentBase::size()
 	{
-		return { m_canvas.width, m_canvas.height };
+		return { canvas.width, canvas.height };
 	}
 
 	bool ComponentBase::contains(const sf::Vector2<dimension_t>& point)
 	{
-		return m_canvas.contains(point);
+		return canvas.contains(point);
 	}
 
 }}

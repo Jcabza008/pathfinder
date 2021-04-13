@@ -18,7 +18,7 @@ namespace pathfinder { namespace view {
 		bool isOpen();
 
 	private:
-		std::thread m_refresh_thread;
+		std::thread refresh_thread;
 
 		void onClose() override;
 		void onClick(sf::Event::MouseButtonEvent event) override;

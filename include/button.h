@@ -2,7 +2,7 @@
 
 namespace pathfinder { namespace view {
 
-	class Button : public ComponentBase 
+	class Button : public ComponentBase
 	{
 	public:
 		using dimensiont_t = ComponentBase::dimension_t;
@@ -26,9 +26,9 @@ namespace pathfinder { namespace view {
 
 	private:
 
-		sf::RenderTarget& m_renderTarget;
+		sf::RenderTarget& renderTarget;
 		sf::Vector2f m_position;
-		sf::Sprite m_sprite;
+		sf::Sprite sprite;
 	};
 
 }}
