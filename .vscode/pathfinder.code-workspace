@@ -71,7 +71,7 @@
                 "name": "(gdb) Launch",
                 "type": "cppdbg",
                 "request": "launch",
-                "program": "enter program name, for example ${workspaceFolder}/a.out",
+                "program": "${workspaceFolder}/bin/pathfinder",
                 "args": [],
                 "stopAtEntry": false,
                 "cwd": "${workspaceFolder}",

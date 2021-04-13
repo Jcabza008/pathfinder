@@ -20,15 +20,15 @@ namespace pathfinder { namespace view {
 
 	std::shared_ptr<ComponentBase> CompositeComponent::addComponent(const std::shared_ptr<ComponentBase> component)
 	{
-		m_components.push_back(component);
+		components.push_back(component);
 		updateCanvas(component);
 		return component;
 	}
 
 	std::shared_ptr<ComponentBase> CompositeComponent::getComponentAt(const sf::Vector2i& location)
 	{
-		using dim_t = ComponentBase::dimension_t;
-		auto cast_location = sf::Vector2<dim_t>{ static_cast<dim_t>(location.x), static_cast<dim_t>(location.y) };
+		using dit = ComponentBase::dimension_t;
+		auto cast_location = sf::Vector2<dit>{ static_cast<dit>(location.x), static_cast<dit>(location.y) };
 		return getComponentAt(cast_location);
 	}
 
@@ -37,7 +37,7 @@ namespace pathfinder { namespace view {
 		if (!contains(location))
 			return nullptr;
 
-		for (auto& component : m_components)
+		for (auto& component : components)
 			if (component->contains(location))
 				return component;
 
@@ -46,12 +46,12 @@ namespace pathfinder { namespace view {
 
 	void CompositeComponent::updateCanvas(const std::shared_ptr<ComponentBase>& component)
 	{
-		auto c_canvas = component->canvas();
-		auto x0 = std::min(m_canvas.left, component->canvas().left);
-		auto y0 = std::min(m_canvas.top, component->canvas().top);
-		auto x1 = std::max(m_canvas.left + m_canvas.width, c_canvas.left + c_canvas.width);
-		auto y1 = std::max(m_canvas.top + m_canvas.height, c_canvas.top + c_canvas.height);
-		m_canvas = { x0, y0, x1 - x0, y1 - y0 };
+		auto c_canvas = component->getCanvas();
+		auto x0 = std::min(canvas.left, component->getCanvas().left);
+		auto y0 = std::min(canvas.top, component->getCanvas().top);
+		auto x1 = std::max(canvas.left + canvas.width, c_canvas.left + c_canvas.width);
+		auto y1 = std::max(canvas.top + canvas.height, c_canvas.top + c_canvas.height);
+		canvas = { x0, y0, x1 - x0, y1 - y0 };
 	}
 
 	void CompositeComponent::onClick(sf::Event::MouseButtonEvent event)
@@ -70,7 +70,7 @@ namespace pathfinder { namespace view {
 
 	void CompositeComponent::draw()
 	{
-		for (auto& component : m_components)
+		for (auto& component : components)
 			component->draw();
 	}
 

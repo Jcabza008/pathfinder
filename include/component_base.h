@@ -11,7 +11,7 @@ namespace pathfinder { namespace view {
 
 		virtual ~ComponentBase() {};
 
-		sf::Rect<dimension_t> canvas();
+		sf::Rect<dimension_t> getCanvas();
 		sf::Vector2<dimension_t> location();
 		sf::Vector2<dimension_t> size();
 		bool contains(const sf::Vector2<dimension_t>& point);
@@ -20,9 +20,9 @@ namespace pathfinder { namespace view {
 		ComponentBase(const sf::Rect<dimension_t>& canvas);
 		ComponentBase(const sf::Vector2<dimension_t>& location);
 
-		sf::Rect<dimension_t> m_canvas;
+		sf::Rect<dimension_t> canvas;
 
-		static void* m_lastClicked;
+		static void* lastClicked;
 	};
 
 }}

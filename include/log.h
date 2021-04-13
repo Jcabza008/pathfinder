@@ -86,8 +86,8 @@ namespace pathfinder {
 		std::string now();
 		std::string stripPath(str_t path);
 
-		std::vector<leveled_stream> m_streams;
-		std::mutex m_mutex;
+		std::vector<leveled_stream> streams;
+		std::mutex mutex;
 		bool m_showThreadId;
 	};
 

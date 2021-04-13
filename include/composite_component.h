@@ -21,7 +21,7 @@ namespace pathfinder { namespace view {
 	protected:
 		void updateCanvas(const std::shared_ptr<ComponentBase>& component);
 
-		std::vector<std::shared_ptr<ComponentBase>> m_components;
+		std::vector<std::shared_ptr<ComponentBase>> components;
 	};
 
 }}

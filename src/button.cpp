@@ -15,15 +15,15 @@
 namespace pathfinder { namespace view {
 
 	Button::Button(sf::RenderTarget& renderTarget, const Rect& canvas, const sf::Texture& texture)
-		: ComponentBase(canvas), m_renderTarget(renderTarget)
+		: ComponentBase(canvas), renderTarget(renderTarget)
 	{
-		m_sprite = sf::Sprite(texture);
+		sprite = sf::Sprite(texture);
 		setPosition({canvas.left, canvas.top});
 	}
 
 	void Button::draw()
 	{
-		m_renderTarget.draw(m_sprite);
+		renderTarget.draw(sprite);
 	}
 
 	void Button::setPosition(const Vector& position)
@@ -32,12 +32,12 @@ namespace pathfinder { namespace view {
 			static_cast<float>(position.x),
 			static_cast<float>(position.y)
 		};
-		m_sprite.setPosition(m_position);
+		sprite.setPosition(m_position);
 	}
 
 	void Button::setTexture(const sf::Texture& texture)
 	{
-		m_sprite.setTexture(texture);
+		sprite.setTexture(texture);
 	}
 
 	void Button::onClick(sf::Event::MouseButtonEvent event)
@@ -47,19 +47,19 @@ namespace pathfinder { namespace view {
 		if (event.button == sf::Mouse::Button::Right)
 			return;
 
-		m_lastClicked = this;
+		lastClicked = this;
 	}
 
 	void Button::onClickUp(sf::Event::MouseButtonEvent event)
 	{
 		pf_log_trace("mouse button " + std::to_string(event.button) + " UP on button");
 
-		if (event.button == sf::Mouse::Button::Left && this == m_lastClicked)
+		if (event.button == sf::Mouse::Button::Left && this == lastClicked)
 		{
 			pf_log_trace("matching release on button");
 			onButtonClicked();
 		}
-		m_lastClicked = nullptr;
+		lastClicked = nullptr;
 	}
 
 }}

@@ -25,8 +25,8 @@ namespace pathfinder { namespace view {
 
 	AppWindow::~AppWindow()
 	{
-		if (m_refresh_thread.joinable())
-			m_refresh_thread.join();
+		if (refresh_thread.joinable())
+			refresh_thread.join();
 	}
 
 	AppWindow& AppWindow::create()
@@ -37,21 +37,21 @@ namespace pathfinder { namespace view {
 
 	void AppWindow::run()
 	{
-		m_refresh_thread = std::thread(&AppWindow::drawing_loop, this);
+		refresh_thread = std::thread(&AppWindow::drawing_loop, this);
 		WindowBase::run();
 	}
 
 	AppWindow& AppWindow::wait()
 	{
-		if (m_refresh_thread.joinable())
-			m_refresh_thread.join();
+		if (refresh_thread.joinable())
+			refresh_thread.join();
 
 		return *this;
 	}
 
 	AppWindow& AppWindow::clear()
 	{
-		window().clear();
+		getWindow().clear();
 		return *this;
 	}
 
@@ -63,18 +63,18 @@ namespace pathfinder { namespace view {
 
 	AppWindow& AppWindow::display()
 	{
-		window().display();
+		getWindow().display();
 		return *this;
 	}
 
 	bool AppWindow::isOpen()
 	{
-		return window().isOpen();
+		return getWindow().isOpen();
 	}
 
 	void AppWindow::onClose()
 	{
-		window().close();
+		getWindow().close();
 	}
 
 	void AppWindow::onClick(sf::Event::MouseButtonEvent event)

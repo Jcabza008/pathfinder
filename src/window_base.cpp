@@ -12,9 +12,9 @@ namespace pathfinder { namespace view {
 
 	WindowBase& WindowBase::create(sf::VideoMode mode, const sf::String& title, sf::Uint32 style, const sf::ContextSettings& settings)
 	{
-		m_window.create(mode, title, style, settings);
-		m_window.setVerticalSyncEnabled(true);
-		m_window.setFramerateLimit(60);
+		window.create(mode, title, style, settings);
+		window.setVerticalSyncEnabled(true);
+		window.setFramerateLimit(60);
 		return deactivate();
 	}
 
@@ -46,20 +46,20 @@ namespace pathfinder { namespace view {
 
 	WindowBase::~WindowBase()
 	{
-		m_window.close();
+		window.close();
 	}
 
-	sf::RenderWindow& WindowBase::window()
+	sf::RenderWindow& WindowBase::getWindow()
 	{
-		return m_window;
+		return window;
 	};
 
 	void WindowBase::pump()
 	{
-		while (m_window.isOpen())
+		while (window.isOpen())
 		{
 			sf::Event event = {};
-			if(m_window.waitEvent(event))
+			if(window.waitEvent(event))
 				dispatchEvent(event);
 		}
 	}
@@ -77,7 +77,7 @@ namespace pathfinder { namespace view {
 
 	void WindowBase::setActive(bool active)
 	{
-		if (!m_window.setActive(active))
+		if (!window.setActive(active))
 		{
 			std::stringstream ss;
 			ss << "failed to " << (active ? "activate" : "deactivate") << "window";
