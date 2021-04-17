@@ -1,21 +1,45 @@
 #pragma once
 
 namespace pathfinder{
-    struct Dimensions{
-        unsigned int xMax;
-        unsigned int yMax;
-        unsigned int size;
-    };
-    class Map{
-        private:
-            Dimensions dimensions;
-            int *arr;
 
+    constexpr int c_Max_Traversable_Slope = 10;
+    constexpr float c_Negative_Slope_Weight_Correction = 0.5;
+
+    class Map : public Graph
+    {
         public:
-            Map();
-            Map(unsigned int x, unsigned int y);
+        struct Dimensions
+        {
+            unsigned int width;
+            unsigned int height;
+        };
 
-            int getHeight();
+        struct Coordinates
+        {
+            int col;
+            int row;
+        };
+
+        Map(Dimensions dim);
+        Map(vector<int> data, Dimensions dim);
+
+        Dimensions getDimensions();
+        std::vector<int> getData();
+        std::vector<int> getVertices() override;
+        std::vector<Target> getAdjecent(int index) override;
+
+        private:
+        int size();
+        int getIndex(int col, int row);
+        Coordinates getCoords(int index);
+        bool validCoord(Coordinates coords);
+        std::vector<Coordinates> getNeighbors(int index);
+        std::vector<Coordinates> getNeighbors(Coordinates coords);
+        int getWeight(Coords start, Coords target);
+
+        Dimensions dimensions;
+        std::vector<int> data;
     };
+
 }
 
