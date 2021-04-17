@@ -1,4 +1,3 @@
-#include <gtest/gtest.h>
 #include <algorithm>
 #include <bits/stdc++.h>
 #include <functional>
@@ -8,11 +7,14 @@
 #include <utility>
 #include <vector>
 
+#include <gtest/gtest.h>
 #include "graph.h"
+#include "map.h"
 #include "util.h"
 #include "algorithms.h"
 
 #include "graph_test.cpp"
+#include "map_test.cpp"
 #include "priority_queue_test.cpp"
 #include "dijkstrasAlgorithm_test.cpp"
 

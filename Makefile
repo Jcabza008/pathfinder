@@ -3,8 +3,8 @@ INCLUDEFLAG = -I include
 LIBSFLAG = -L lib
 CFLAGS = -g -Wall -std=c++14 $(LIBSFLAG) $(INCLUDEFLAG)
 
-CORELIBS = lib/log.o lib/graph.o lib/util.o lib/priority_queue.o \
-		lib/algorithms.o lib/color.o
+CORELIBS = lib/log.o lib/graph.o lib/map.o lib/util.o lib/priority_queue.o \
+		lib/algorithms.o lib/random.o lib/color.o
 VIEWLIBS = lib/app_window.o lib/button.o lib/component_base.o lib/composite_component.o \
 		lib/window_base.o lib/texture_provider.o lib/map_view.o lib/simple_views.o
 
@@ -80,6 +80,9 @@ lib/log.o: lib/
 lib/graph.o: lib/
 	$(CC) $(CFLAGS) -c src/graph.cpp -o lib/graph.o
 
+lib/map.o: lib/
+	$(CC) $(CFLAGS) -c src/map.cpp -o lib/map.o
+
 lib/priority_queue.o: lib/
 	$(CC) $(CFLAGS) -c src/priority_queue.cpp -o lib/priority_queue.o
 
@@ -88,6 +91,9 @@ lib/algorithms.o: lib/
 
 lib/util.o: lib/
 	$(CC) $(CFLAGS) -c src/util.cpp -o lib/util.o
+
+lib/random.o: lib/
+	$(CC) $(CFLAGS) -c src/random.cpp -o lib/random.o
 
 lib/color.o: lib/
 	$(CC) $(CFLAGS) -c src/color.cpp -o lib/color.o
