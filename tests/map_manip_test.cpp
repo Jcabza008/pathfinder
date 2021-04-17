@@ -1,21 +1,27 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <functional>
+#include <unordered_map>
+#include <list>
 #include <random>
 #include <vector>
+#include <utility>
 
 #include "random.h"
 #include "graph.h"
 #include "map.h"
 #include "util.h"
+#include "algorithms.h"
 #include "map_manip.h"
 
 using namespace pathfinder;
+using ::testing::Return;
 
 class MockRandomIntGenerator : public RandomIntGenerator
 {
     public:
     MOCK_METHOD0(getRandom, int(void));
-}
+};
 
 TEST(MapManipulator, setHeight_Test0)
 {
@@ -26,7 +32,7 @@ TEST(MapManipulator, setHeight_Test0)
     Map map(Map::Dimensions({10, 10}));
     MapManipulator mapManip(mockRandom);
 
-    mapManip.setHeight(map, Map::Coordinates({0, 0}, 5));
+    mapManip.setHeight(map, Map::Coordinates({0, 0}), 5);
 
     std::vector<int> expected = {
         5, 4, 3, 2, 1, 0, 0, 0, 0, 0,
@@ -53,7 +59,7 @@ TEST(MapManipulator, setHeight_Test1)
     Map map(Map::Dimensions({10, 10}));
     MapManipulator mapManip(mockRandom);
 
-    mapManip.setHeight(map, Map::Coordinates({0, 0}, 5));
+    mapManip.setHeight(map, Map::Coordinates({0, 0}), 5);
 
     std::vector<int> expected = {
         5, 3, 1, 0, 0, 0, 0, 0, 0, 0,
@@ -80,7 +86,7 @@ TEST(MapManipulator, setHeight_Test2)
     Map map(Map::Dimensions({10, 10}));
     MapManipulator mapManip(mockRandom);
 
-    mapManip.setHeight(map, Map::Coordinates({5, 5}, 10));
+    mapManip.setHeight(map, Map::Coordinates({5, 5}), 10);
 
     std::vector<int> expected = {
          0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -120,7 +126,7 @@ TEST(MapManipulator, affectHeight_Test0)
     Map map(original, Map::Dimensions({10, 10}));
     MapManipulator mapManip(mockRandom);
 
-    mapManip.affectHeight(map, Map::Coordinates({3, 3}, 3));
+    mapManip.affectHeight(map, Map::Coordinates({3, 3}), 3);
 
     std::vector<int> expected = {
          0,  0,  0,  0,  0,  0,  0,  0,  0,  0,

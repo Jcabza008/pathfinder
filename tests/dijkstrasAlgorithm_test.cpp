@@ -35,7 +35,7 @@ TEST(DijkstrasAlgorithm, findPaths_singleVertices)
         .WillRepeatedly(Invoke([&](int id){ return adjTable[id]; }));
 
     DijkstrasAlgorithm dijkstras;
-    auto paths = dijkstras.findPaths(&graph, 0);
+    auto paths = dijkstras.findPaths(graph, 0);
 
     ASSERT_EQ(paths[0], PathData({0, -1}));
 }
@@ -52,7 +52,7 @@ TEST(DijkstrasAlgorithm, findPaths_noVertices)
         .WillRepeatedly(Invoke([&](int id){ return adjTable[id]; }));
 
     DijkstrasAlgorithm dijkstras;
-    auto paths = dijkstras.findPaths(&graph, 0);
+    auto paths = dijkstras.findPaths(graph, 0);
 
     ASSERT_TRUE(paths.empty());
 }
@@ -76,7 +76,7 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesDirected0)
         .WillRepeatedly(Invoke([&](int id){ return adjTable[id]; }));
 
     DijkstrasAlgorithm dijkstras;
-    auto paths = dijkstras.findPaths(&graph, 0);
+    auto paths = dijkstras.findPaths(graph, 0);
 
     ASSERT_EQ(paths[0], PathData({ 0, -1}));
     ASSERT_EQ(paths[1], PathData({ 4,  0}));
@@ -107,7 +107,7 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesDirected1)
         .WillRepeatedly(Invoke([&](int id){ return adjTable[id]; }));
 
     DijkstrasAlgorithm dijkstras;
-    auto paths = dijkstras.findPaths(&graph, 0);
+    auto paths = dijkstras.findPaths(graph, 0);
 
     ASSERT_EQ(paths[0],  PathData({ 0, -1}));
     ASSERT_EQ(paths[1],  PathData({ 2,  0}));
@@ -137,7 +137,7 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesUndirected0)
         .WillRepeatedly(Invoke([&](int id){ return adjTable[id]; }));
 
     DijkstrasAlgorithm dijkstras;
-    auto paths = dijkstras.findPaths(&graph, 1);
+    auto paths = dijkstras.findPaths(graph, 1);
 
     ASSERT_EQ(paths[0], PathData({1,  1}));
     ASSERT_EQ(paths[1], PathData({0, -1}));
@@ -167,7 +167,7 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesUndirected1)
         .WillRepeatedly(Invoke([&](int id){ return adjTable[id]; }));
 
     DijkstrasAlgorithm dijkstras;
-    auto paths = dijkstras.findPaths(&graph, 0);
+    auto paths = dijkstras.findPaths(graph, 0);
 
     ASSERT_EQ(paths[0],  PathData({ 0,-1}));
     ASSERT_EQ(paths[1],  PathData({ 2, 0}));

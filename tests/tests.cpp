@@ -10,12 +10,12 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include "random.h"
 #include "graph.h"
 #include "map.h"
+#include "algorithms.h"
 #include "map_manip.h"
 #include "util.h"
-#include "random.h"
-#include "algorithms.h"
 
 #include "graph_test.cpp"
 #include "map_test.cpp"
