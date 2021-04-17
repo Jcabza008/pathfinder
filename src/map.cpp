@@ -3,9 +3,7 @@
 #include <utility>
 #include <vector>
 
-#include "log.h"
 #include "graph.h"
-
 #include "map.h"
 
 namespace pathfinder {
@@ -46,14 +44,14 @@ namespace pathfinder {
             auto weight = getWeight(this->getCoords(index), *it);
             if(weight >= 0)
             {
-                result.push_back(Target({this->getIndex(it->col, it->row), weight}));
+                result.push_back(Target({static_cast<int>(this->getIndex(it->col, it->row)), weight}));
             }
         }
 
         return result;
     }
 
-    int Map::size()
+    unsigned int Map::size()
     {
         return this->dimensions.width * this->dimensions.height;
     }
@@ -87,7 +85,7 @@ namespace pathfinder {
         return neighbors;
     }
 
-    int Map::getIndex(int col, int row)
+    unsigned int Map::getIndex(unsigned int col, unsigned int row)
     {
         return row * this->dimensions.width + col;
     }
@@ -117,7 +115,7 @@ namespace pathfinder {
             return -1;
 
         if(targetHeight - startHeight < 0) // Negative slope
-            return 1 + ((startHeight - targetHeight) * c_Negative_Slope_Weight_Correction);
+            return 1 + ((startHeight - targetHeight) / c_Negative_Slope_Weight_Correction);
 
         return 1 + (targetHeight - startHeight);
     }

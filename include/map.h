@@ -1,9 +1,9 @@
 #pragma once
 
-namespace pathfinder{
+namespace pathfinder {
 
     constexpr int c_Max_Traversable_Slope = 10;
-    constexpr float c_Negative_Slope_Weight_Correction = 0.5;
+    constexpr int c_Negative_Slope_Weight_Correction = 2;
 
     class Map : public Graph
     {
@@ -29,8 +29,8 @@ namespace pathfinder{
         std::vector<Target> getAdjecent(int index) override;
 
         private:
-        int size();
-        int getIndex(int col, int row);
+        unsigned int size();
+        unsigned int getIndex(unsigned int col, unsigned int row);
         Coordinates getCoords(int index);
         bool validCoord(Coordinates coords);
         std::vector<Coordinates> getNeighbors(int index);
