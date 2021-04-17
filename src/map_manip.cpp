@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <random>
 
 #include "random.h"
 #include "graph.h"
@@ -10,11 +11,11 @@
 
 namespace pathfinder {
 
-    void MapManipulator::setHeight(Map& mp, Map::Coordinates point, int height){
+    void MapManipulator::setHeight(Map& mp, Map::Coordinates coords, int height){
 
     };
 
-    void pathfinder::map_manipulator::affectHeight(Map& mp, Map::Coordinates point, int change){
+    void MapManipulator::affectHeight(Map& mp, Map::Coordinates coords, int change){
 
     };
 
