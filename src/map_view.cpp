@@ -52,7 +52,7 @@ namespace pathfinder { namespace view {
 
 	MapView::Vector MapView::getMapPointCoordsFromPoint(const Vector& point)
 	{
-		return { point.x / mapPointSize.x, point.y / mapPointSize.y };
+		return { (point.x - this->canvas.left) / mapPointSize.x, (point.y - this->canvas.top) / mapPointSize.y };
 	}
 
 	MapView::Vector MapView::getMapPointCoordsFromPoint(const sf::Vector2i& point)
@@ -109,7 +109,7 @@ namespace pathfinder { namespace view {
 
 	MapView::Vector MapView::getLocation(dimension_t col, dimension_t row)
 	{
-		return { col * mapPointSize.x, row * mapPointSize.y };
+		return { this->canvas.left + (col * mapPointSize.x), this->canvas.top + (row * mapPointSize.y) };
 	}
 
 	void MapView::draw()

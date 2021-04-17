@@ -20,7 +20,7 @@ namespace pathfinder { namespace view {
 
 	WindowBase& WindowBase::create(const sf::String& title)
 	{
-		return create(sf::VideoMode(800, 600), title);
+		return create(sf::VideoMode(1024, 720), title);
 	}
 
 	void WindowBase::run()
