@@ -14,7 +14,7 @@ namespace pathfinder
     template <typename T>
     bool equalVectorsUnordered(std::vector<T> lhs, std::vector<T> rhs)
     {
-        std::unordered_map<T, int> count;
+        std::map<T, int> count;
         for(auto it = lhs.cbegin(); it != lhs.cend(); it++)
             count[*it]++;
 

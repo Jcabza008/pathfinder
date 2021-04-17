@@ -15,14 +15,14 @@ namespace pathfinder {
         this->data = std::vector<int>(this->size(), 0);
     };
 
-    Map::Map(vector<int> _data, Dimensions dim) : dimensions(dim), data(_data) {}
+    Map::Map(std::vector<int> _data, Dimensions dim) : dimensions(dim), data(_data) {}
 
     Map::Dimensions Map::getDimensions()
     {
         return this->dimensions;
     }
 
-    std::vector<int> Map::getData()
+    std::vector<int>& Map::getData()
     {
         return this->data;
     }
@@ -30,7 +30,7 @@ namespace pathfinder {
     std::vector<int> Map::getVertices()
     {
         std::vector<int> vertices;
-        for(size_t i = 0; i < this->size(); i++)
+        for(size_t i = 0; i < (size_t)this->size(); i++)
             vertices.push_back(i);
 
         return vertices;
@@ -46,7 +46,7 @@ namespace pathfinder {
             auto weight = getWeight(this->getCoords(index), *it);
             if(weight >= 0)
             {
-                result.push_back(Target({this->getIndex(*it), weight}));
+                result.push_back(Target({this->getIndex(it->col, it->row), weight}));
             }
         }
 
@@ -58,30 +58,30 @@ namespace pathfinder {
         return this->dimensions.width * this->dimensions.height;
     }
 
-    std::vector<Coordinates> Map::getNeighbors(int index)
+    std::vector<Map::Coordinates> Map::getNeighbors(int index)
     {
         return this->getNeighbors(this->getCoords(index));
     }
 
-    std::vector<Coordinates> Map::getNeighbors(Coordinates coords)
+    std::vector<Map::Coordinates> Map::getNeighbors(Coordinates coords)
     {
         std::vector<Coordinates> neighbors;
-        int row = coords.row;
-		int col = coords.col;
+        auto row = coords.row;
+		auto col = coords.col;
 
-		neighbors.push_back(Coordinates({row - 1, col - 1})); // upleft
-        neighbors.push_back(Coordinates({row - 1, col    })); // up
-        neighbors.push_back(Coordinates({row - 1, col + 1})); // upright
-        neighbors.push_back(Coordinates({row    , col - 1})); // left
-        neighbors.push_back(Coordinates({row    , col + 1})); // right
-        neighbors.push_back(Coordinates({row + 1, col - 1})); // downleft
-        neighbors.push_back(Coordinates({row + 1, col    })); // down
-        neighbors.push_back(Coordinates({row + 1, col + 1})); // downright
+		neighbors.push_back(Coordinates({col - 1, row - 1})); // upleft
+        neighbors.push_back(Coordinates({col    , row - 1})); // up
+        neighbors.push_back(Coordinates({col + 1, row - 1})); // upright
+        neighbors.push_back(Coordinates({col - 1, row    })); // left
+        neighbors.push_back(Coordinates({col + 1, row    })); // right
+        neighbors.push_back(Coordinates({col - 1, row + 1})); // downleft
+        neighbors.push_back(Coordinates({col    , row + 1})); // down
+        neighbors.push_back(Coordinates({col + 1, row + 1})); // downright
 
         for(auto it = neighbors.begin(); it != neighbors.end(); it++)
         {
             if(!validCoord(*it))
-                neighbors.erase(it);
+                neighbors.erase(it--);
         }
 
         return neighbors;
@@ -97,18 +97,18 @@ namespace pathfinder {
         return Coordinates({index % this->dimensions.width, index / this->dimensions.width});
     }
 
-    bool Map::validCoord(Coordinate coords)
+    bool Map::validCoord(Coordinates coords)
     {
-        if (coords.row < 0 || coords.col < 0 || coords.row >= this->dimensions.height || coords.col >= this->dimensions.width)
+        if (coords.row >= this->dimensions.height || coords.col >= this->dimensions.width)
 			return false;
 
         return true;
     }
 
-    int Map::getWeight(Coords start, Coords target)
+    int Map::getWeight(Coordinates start, Coordinates target)
     {
-        auto startHeight = this->data[this->getIndex(start)];
-        auto targetHeight = this->data[this->getIndex(target)];
+        auto startHeight = this->data[this->getIndex(start.col, start.row)];
+        auto targetHeight = this->data[this->getIndex(target.col, target.row)];
 
         if(targetHeight < 0 || startHeight < 0) // Water is unaccessible
             return -1;
@@ -117,9 +117,9 @@ namespace pathfinder {
             return -1;
 
         if(targetHeight - startHeight < 0) // Negative slope
-            return (startHeight - targetHeight) * c_Negative_Slope_Weight_Correction;
+            return 1 + ((startHeight - targetHeight) * c_Negative_Slope_Weight_Correction);
 
-        return targetHeight - startHeight;
+        return 1 + (targetHeight - startHeight);
     }
 
 }

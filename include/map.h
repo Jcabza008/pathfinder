@@ -16,15 +16,15 @@ namespace pathfinder{
 
         struct Coordinates
         {
-            int col;
-            int row;
+            unsigned int col;
+            unsigned int row;
         };
 
         Map(Dimensions dim);
-        Map(vector<int> data, Dimensions dim);
+        Map(std::vector<int> data, Dimensions dim);
 
         Dimensions getDimensions();
-        std::vector<int> getData();
+        std::vector<int>& getData();
         std::vector<int> getVertices() override;
         std::vector<Target> getAdjecent(int index) override;
 
@@ -35,7 +35,7 @@ namespace pathfinder{
         bool validCoord(Coordinates coords);
         std::vector<Coordinates> getNeighbors(int index);
         std::vector<Coordinates> getNeighbors(Coordinates coords);
-        int getWeight(Coords start, Coords target);
+        int getWeight(Coordinates start, Coordinates target);
 
         Dimensions dimensions;
         std::vector<int> data;
