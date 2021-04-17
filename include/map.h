@@ -23,18 +23,19 @@ namespace pathfinder {
         Map(Dimensions dim);
         Map(std::vector<int> data, Dimensions dim);
 
-        Dimensions getDimensions();
-        std::vector<int>& getData();
         std::vector<int> getVertices() override;
         std::vector<Target> getAdjecent(int index) override;
 
-        private:
         unsigned int size();
-        unsigned int getIndex(unsigned int col, unsigned int row);
+        std::vector<int>& getData();
+        Dimensions getDimensions();
         Coordinates getCoords(int index);
-        bool validCoord(Coordinates coords);
+        unsigned int getIndex(unsigned int col, unsigned int row);
         std::vector<Coordinates> getNeighbors(int index);
         std::vector<Coordinates> getNeighbors(Coordinates coords);
+
+        private:
+        bool validCoord(Coordinates coords);
         int getWeight(Coordinates start, Coordinates target);
 
         Dimensions dimensions;

@@ -3,14 +3,20 @@
 #include <utility>
 #include <vector>
 
+#include "random.h"
 #include "graph.h"
 #include "map.h"
 #include "map_manip.h"
 
-void pathfinder::map_manipulator::setHeight(Map& mp, int point, int height){
+namespace pathfinder {
 
-};
+    void MapManipulator::setHeight(Map& mp, Map::Coordinates point, int height){
 
-void pathfinder::map_manipulator::affectHeight(Map& mp, int point, int change){
+    };
 
-};
+    void pathfinder::map_manipulator::affectHeight(Map& mp, Map::Coordinates point, int change){
+
+    };
+
+
+}

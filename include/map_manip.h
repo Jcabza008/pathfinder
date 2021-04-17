@@ -1,12 +1,15 @@
 #pragma once
 
 namespace pathfinder{
-    class manipulator{
 
-    };
-    class map_manipulator{
+    class MapManipulator{
         public:
-            void setHeight(Map& mp, int point, int height);
-            void affectHeight(Map& mp, int point, int height);
+        MapManipulator(RandomIntGenerator& _rng) : rng(_rng) {}
+        void setHeight(Map& map, Map::Coordinates coords, int height);
+        void affectHeight(Map& map, Map::Coordinates coords, int factor);
+
+        private:
+        RandomIntGenerator& rng;
     };
+
 }
