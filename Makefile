@@ -6,7 +6,7 @@ CFLAGS = -g -Wall -std=c++14 $(LIBSFLAG) $(INCLUDEFLAG)
 CORELIBS = lib/log.o lib/graph.o lib/util.o lib/priority_queue.o \
 		lib/algorithms.o lib/color.o
 VIEWLIBS = lib/app_window.o lib/button.o lib/component_base.o lib/composite_component.o \
-		lib/window_base.o lib/texture_provider.o lib/map_view.o
+		lib/window_base.o lib/texture_provider.o lib/map_view.o lib/simple_views.o
 
 SFMLFLAGS = `pkg-config sfml-all --cflags --libs`
 GTESTFLAGS = `pkg-config gtest gmock --cflags --libs`
@@ -20,7 +20,6 @@ CPPCOREGUIDELINES = 'cppcoreguidelines-avoid-goto,	 						\
 				cppcoreguidelines-owning-memory,                        	\
 				cppcoreguidelines-prefer-member-initializer,				\
 				cppcoreguidelines-pro-bounds-constant-array-index,	 		\
-				cppcoreguidelines-pro-bounds-pointer-arithmetic,  			\
 				cppcoreguidelines-pro-type-const-cast,	  					\
 				cppcoreguidelines-pro-type-cstyle-cast,						\
 				cppcoreguidelines-pro-type-member-init,						\
@@ -38,6 +37,7 @@ DISABLEDCPPCOREGUIDELINES = 'cppcoreguidelines-pro-type-union-access,  		\
 				cppcoreguidelines-pro-bounds-array-to-pointer-decay, 		\
 				cppcoreguidelines-macro-usage,								\
 				cppcoreguidelines-non-private-member-variables-in-classes,  \
+				cppcoreguidelines-pro-bounds-pointer-arithmetic,			\
 				cppcoreguidelines-special-member-functions'
 
 run_clang_tidy:
@@ -95,6 +95,9 @@ lib/color.o: lib/
 # View Libs
 lib/texture_provider.o: lib/
 	$(CC) $(CFLAGS) -c src/texture_provider.cpp -o lib/texture_provider.o $(SFMLFLAGS)
+
+lib/simple_views.o: lib/
+	$(CC) $(CFLAGS) -c src/simple_views.cpp -o lib/simple_views.o $(SFMLFLAGS)
 
 lib/button.o: lib/
 	$(CC) $(CFLAGS) -c src/button.cpp -o lib/button.o $(SFMLFLAGS)

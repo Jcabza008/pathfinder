@@ -16,6 +16,7 @@ namespace pathfinder { namespace view {
 
 		void setPosition(const Vector& position);
 		void setTexture(const sf::Texture& texture);
+		void setColor(const sf::Color& color);
 		void draw() override;
 
 		void onClick(sf::Event::MouseButtonEvent event) override;
@@ -25,7 +26,6 @@ namespace pathfinder { namespace view {
 		~Button() {};
 
 	private:
-
 		sf::RenderTarget& renderTarget;
 		sf::Vector2f m_position;
 		sf::Sprite sprite;

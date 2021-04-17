@@ -40,6 +40,11 @@ namespace pathfinder { namespace view {
 		sprite.setTexture(texture);
 	}
 
+	void Button::setColor(const sf::Color& color)
+	{
+		sprite.setColor(color);
+	}
+
 	void Button::onClick(sf::Event::MouseButtonEvent event)
 	{
 		pf_log_trace("mouse button " + std::to_string(event.button) + " DOWN on button");
