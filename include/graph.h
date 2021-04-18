@@ -23,6 +23,7 @@ namespace pathfinder
     class Graph
     {
         public:
+        virtual ~Graph() {};
         /**
          * @brief Get a list of vertices
          * @return std::vector<int> list of vetices

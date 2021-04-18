@@ -43,7 +43,10 @@
 #include "app_window.h"
 
 // core Libs
+#include "random.h"
 #include "graph.h"
+#include "map.h"
+#include "map_manip.h"
 #include "algorithms.h"
 #include "priority_queue.h"
 #include "util.h"
@@ -55,6 +58,8 @@ using namespace pathfinder::view;
 constexpr ComponentBase::dimension_t
     c_map_width = 1024,
     c_map_height = 686;
+
+constexpr int c_oneTimeAffectHeight = 50;
 
 const char * const c_texturePaths[] = {
     "./images/top_bar_background.png",
@@ -76,7 +81,7 @@ void configureLogger()
     .showThreadId(true);
 }
 
-void recolorMapView(std::shared_ptr<MapView> mapView, int* map, MapView::Vector& dimensions, HeightColorProvider& colorProvider)
+void recolorMapView(std::shared_ptr<MapView> mapView, const std::vector<int>& map, MapView::Vector& dimensions, HeightColorProvider& colorProvider)
 {
     for(size_t row = 0; row < dimensions.y; row++)
         for(size_t col = 0; col < dimensions.x; col++)
@@ -88,27 +93,23 @@ void recolorMapView(std::shared_ptr<MapView> mapView, int* map, MapView::Vector&
 
 void run()
 {
-    // example 16x16
-    ComponentBase::dimension_t c_map_cols = 16;
-    ComponentBase::dimension_t c_map_rows = 16;
-    int stub_map[256] = {
-         1,  1,  1,  0, -1, -2, -3, -5, -2, -1,  0,  0,  0,  0,  1,  2,
-         1,  1,  2,  1,  1,  1, -2, -3, -3, -2, -1,  0,  1,  1,  2,  2,
-         1,  2,  2,  2,  1,  1, -1, -2, -2, -2, -1,  0,  1,  2,  3,  4,
-         1,  2,  3,  2,  1,  0,  0, -1, -1, -1,  0,  0,  1,  2,  4,  5,
-         1,  3,  4,  2,  2,  1,  1,  0,  0, -1,  0,  1,  1,  3,  5,  5,
-         2,  3,  4,  3,  2,  2,  1,  0,  0,  0,  0,  2,  2,  4,  5,  4,
-         2,  4,  5,  5,  3,  2,  1,  1,  0,  0,  1,  2,  3,  5,  5,  3,
-         2,  2,  4,  5,  5,  3,  2,  1,  0,  0,  2,  3,  5,  5,  4,  3,
-         1,  2,  3,  4,  5,  4,  3,  1,  1,  1,  1,  2,  5,  4,  3,  2,
-         1,  1,  2,  4,  4,  3,  2,  2,  2,  2,  3,  3,  4,  4,  2,  2,
-         0,  1,  2,  3,  3,  2,  2,  3,  4,  3,  2,  2,  3,  3,  2,  1,
-         0,  1,  1,  2,  2,  1,  1,  2,  3,  2,  1,  2,  2,  2,  1,  1,
-         0,  0,  1,  2,  1,  1,  1,  1,  2,  1,  1,  2,  2,  1,  1,  0,
-        -1,  0,  1,  1,  1,  1,  0,  1,  1,  1,  1,  2,  1,  1,  0,  0,
-        -1,  0,  0,  0,  0,  1,  0,  0,  0,  0,  0,  1,  1,  0,  0,  0,
-        -2, -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0
-    };
+    // Map manipulator
+    auto slopeVariationGenerator = std::make_shared<RandomNormalIntGenerator>(5, 1.5);
+    auto mapManip = std::make_shared<MapManipulator>(slopeVariationGenerator.get());
+
+    // Map Random Manipulator
+    auto featuresCountGenerator = std::make_shared<RandomNormalIntGenerator>(10000, 1500);
+    auto featuresElevationGenerator = std::make_shared<RandomNormalIntGenerator>(150, 75);
+    auto mapRandomManip = std::make_shared<MapRandomManipulator>(mapManip.get(), featuresCountGenerator.get(), featuresElevationGenerator.get());
+
+    // Map
+    auto map = std::make_shared<Map>(Map::Dimensions({1024, 686}));
+
+    // Generate Random Map
+    auto widthSelectGenerator = std::make_shared<RandomUniformIntGenerator>(0, map.get()->getDimensions().width - 1);
+    auto heightSelectGenerator = std::make_shared<RandomUniformIntGenerator>(0, map.get()->getDimensions().height - 1);
+    mapRandomManip.get()->generateRandomFeatures(map.get(), widthSelectGenerator.get(), heightSelectGenerator.get());
+    mapManip.get()->blur(map.get());
 
     // auxiliaty variables
     MapView::MapPoint* point_selected = nullptr;
@@ -116,7 +117,7 @@ void run()
     bool searchOn = false;
 
     // core
-    HeightColorProviderImpl colorProvider(-5, 5);
+    HeightColorProviderImpl colorProvider(map.get()->getMinValue(), map.get()->getMaxValue());
 
     // window
     AppWindow app_window;
@@ -127,8 +128,8 @@ void run()
     auto texture_provider = TextureProvider(std::vector<std::string>(std::begin(c_texturePaths), std::end(c_texturePaths)));
 
     auto map_rect = MapView::Rect({ 1, 35, c_map_width, c_map_height});
-    auto point_count = MapView::Vector({ c_map_cols, c_map_rows });
-    auto map = std::make_shared<MapView>(app_window.getWindow(), map_rect, point_count, texture_provider.getTexture("map_point_background"));
+    auto point_count = MapView::Vector({ map.get()->getDimensions().width , map.get()->getDimensions().height });
+    auto mapView = std::make_shared<MapView>(app_window.getWindow(), map_rect, point_count, texture_provider.getTexture("map_point_background"));
 
     auto topBarTexture = texture_provider.getTexture("top_bar_background");
     topBarTexture.setRepeated(true);
@@ -149,13 +150,13 @@ void run()
     topBar.get()->addComponent(upButton);
     topBar.get()->addComponent(downButton);
     app_window.addComponent(topBar);
-    app_window.addComponent(map);
+    app_window.addComponent(mapView);
 
     // initial setup
-    recolorMapView(map, stub_map, point_count, colorProvider);
+    recolorMapView(mapView, map.get()->getData(), point_count, colorProvider);
 
     // hook events
-    map.get()->onMapPointClicked = [&](auto point, auto coords) {
+    mapView.get()->onMapPointClicked = [&](auto point, auto coords) {
         if(point_selected)
         {
             if(searchOn)
@@ -190,22 +191,18 @@ void run()
         if(point_selected == nullptr)
             return;
 
-        // TODO: perform action on map
-
-        // TODO: redraw map
-        // eg
-        recolorMapView(map, stub_map, point_count, colorProvider);
+        mapManip.get()->affectHeight(map.get(), Map::Coordinates({point_selected_coords.x, point_selected_coords.y}), c_oneTimeAffectHeight);
+        colorProvider = HeightColorProviderImpl(map.get()->getMinValue(), map.get()->getMaxValue());
+        recolorMapView(mapView, map.get()->getData(), point_count, colorProvider);
     };
 
     downButton.get()->onButtonClicked = [&]() {
         if(point_selected == nullptr)
             return;
 
-        // TODO: perform action on map
-
-        // TODO: redraw map
-        // eg
-        recolorMapView(map, stub_map, point_count, colorProvider);
+        mapManip.get()->affectHeight(map.get(), Map::Coordinates({point_selected_coords.x, point_selected_coords.y}), (-1) * c_oneTimeAffectHeight);
+        colorProvider = HeightColorProviderImpl(map.get()->getMinValue(), map.get()->getMaxValue());
+        recolorMapView(mapView, map.get()->getData(), point_count, colorProvider);
     };
 
     // draw until closed

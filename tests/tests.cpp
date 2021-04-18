@@ -1,4 +1,3 @@
-#include <gtest/gtest.h>
 #include <algorithm>
 #include <bits/stdc++.h>
 #include <functional>
@@ -7,12 +6,20 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <random>
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
+#include "random.h"
 #include "graph.h"
-#include "util.h"
+#include "map.h"
 #include "algorithms.h"
+#include "map_manip.h"
+#include "util.h"
 
 #include "graph_test.cpp"
+#include "map_test.cpp"
+#include "map_manip_test.cpp"
 #include "priority_queue_test.cpp"
 #include "dijkstrasAlgorithm_test.cpp"
 
