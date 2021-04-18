@@ -55,7 +55,6 @@ namespace pathfinder {
                 }
             }
         }
-
         return paths;
     }
 

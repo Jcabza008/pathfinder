@@ -23,7 +23,6 @@ CPPCOREGUIDELINES = 'cppcoreguidelines-avoid-goto,	 						\
 				cppcoreguidelines-pro-type-const-cast,	  					\
 				cppcoreguidelines-pro-type-cstyle-cast,						\
 				cppcoreguidelines-pro-type-member-init,						\
-				cppcoreguidelines-pro-type-reinterpret-cast,  				\
 				cppcoreguidelines-pro-type-static-cast-downcast,			\
 				cppcoreguidelines-pro-type-vararg,	  						\
 				cppcoreguidelines-slicing,	  								\
@@ -35,6 +34,7 @@ DISABLEDCPPCOREGUIDELINES = 'cppcoreguidelines-pro-type-union-access,  		\
 				cppcoreguidelines-avoid-magic-numbers,						\
 				cppcoreguidelines-avoid-c-arrays,							\
 				cppcoreguidelines-pro-bounds-array-to-pointer-decay, 		\
+				cppcoreguidelines-pro-type-reinterpret-cast,  				\
 				cppcoreguidelines-macro-usage,								\
 				cppcoreguidelines-non-private-member-variables-in-classes,  \
 				cppcoreguidelines-pro-bounds-pointer-arithmetic,			\
