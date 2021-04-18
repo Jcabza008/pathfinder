@@ -20,7 +20,7 @@ namespace pathfinder {
          * @param start the ID of the vertex to use as start
          * @return a map from the vertices to the cost and predecesors
          */
-        virtual std::unordered_map<int, PathData> findPaths(Graph& graph, int start) = 0;
+        virtual std::unordered_map<int, PathData> findPaths(Graph* graph, int start) = 0;
     };
 
     class DijkstrasAlgorithm : PF_Algoritm
@@ -38,7 +38,7 @@ namespace pathfinder {
          * @param start the ID of the vertex to use as start
          * @return a map from the vertices to the cost and predecesors
          */
-        std::unordered_map<int, PathData> findPaths(Graph& graph, int start) override;
+        std::unordered_map<int, PathData> findPaths(Graph* graph, int start) override;
 
         private:
         struct VertexData
@@ -47,7 +47,5 @@ namespace pathfinder {
             PathData* data;
         };
     };
-
-    void bfsGraphTraversal(Graph& graph, int start, std::function<void(int index, int level)> action);
 
 }

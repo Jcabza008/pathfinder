@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 #include <functional>
 #include <list>
-#include <queue>
 #include <unordered_map>
 #include <vector>
 
@@ -16,9 +15,9 @@ namespace pathfinder {
         return lhs.cost == rhs.cost && lhs.predecesor == rhs.predecesor;
     }
 
-    std::unordered_map<int, PathData> DijkstrasAlgorithm::findPaths(Graph& graph, int start)
+    std::unordered_map<int, PathData> DijkstrasAlgorithm::findPaths(Graph* graph, int start)
     {
-        auto vertices = graph.getVertices();
+        auto vertices = graph->getVertices();
         std::unordered_map<int, bool> visited;
         std::unordered_map<int, PathData> paths;
         PriorityQueue<VertexData> queue(
@@ -43,7 +42,7 @@ namespace pathfinder {
             queue.pop();
             visited[vertex.index] = true;
 
-            auto neighbors = graph.getAdjecent(vertex.index);
+            auto neighbors = graph->getAdjecent(vertex.index);
             for(auto it = neighbors.cbegin(); it != neighbors.cend(); it++)
             {
                 if(visited[it->to])
@@ -59,31 +58,5 @@ namespace pathfinder {
 
         return paths;
     }
-
-    void bfsGraphTraversal(Graph& graph, int start, std::function<void(int index, int level)> action)
-    {
-        std::unordered_map<int, bool> visited;
-        std::queue<std::pair<int, int>> q;
-
-        visited[start] = true;
-        q.push({start, 0});
-
-        while(!q.empty())
-        {
-            auto curr = q.front();
-            q.pop();
-            action(curr.first, curr.second);
-            visited[curr.first] = true;
-
-            auto neighbors = graph.getAdjecent(curr.first);
-            for(auto it = neighbors.cbegin(); it != neighbors.cend(); it++)
-            {
-                if(!visited[it->to])
-                    q.push({it->to, curr.second + 1});
-            }
-        }
-
-    }
-
 
 }
