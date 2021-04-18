@@ -2,11 +2,10 @@
 #include <unordered_map>
 #include <utility>
 #include <iostream>
-#include <fstream>
 #include <vector>
 
-#include "graph.h"
 #include "map.h"
+#include "graph.h"
 
 namespace pathfinder {
 
@@ -97,21 +96,23 @@ namespace pathfinder {
         return Coordinates({index % this->dimensions.width, index / this->dimensions.width});
     }
     
-    Map Map::Parser::parse(std::ifstream& input){
-        Dimensions d;
-        std::vector<int> dta;
-        input >> d.height;
-        input >> d.width;
-        while(input.is_open()){
-            int i; 
-            input >> i;
-            dta.push_back(i);
-        }
-        Map map(dta, d);
+    Map Map::Parser::parse(std::istream& binaryInput){
+        binaryInput.seekg(0, binaryInput.end);
+        auto fileLength = binaryInput.tellg();
+        
+        Map::Dimensions d;
+        binaryInput >> d.height;
+        binaryInput >> d.width;
+        int cap = d.width*d.height;
+        std::vector<int> data;
+        char* buf = new char [fileLength];
+        binaryInput.read(buf, fileLength);
+        Map map(data, d);
         return map;
     }
-    std::ofstream& Map::Parser::deparse(Map& map, std::string filename){
-        std::ofstream output;
+    std::ostream& Map::Parser::deparse(Map& map, std::string filename){
+        std::filebuf fb;
+        std::ostream output();
         output.open(filename);
         for(auto i : map.getData()){
             output << i;

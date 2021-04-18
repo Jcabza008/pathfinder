@@ -98,6 +98,7 @@
         "scoped_allocator": "cpp",
         "shared_mutex": "cpp",
         "cuchar": "cpp",
-        "numbers": "cpp"
+        "numbers": "cpp",
+        "filesystem": "cpp"
     }
 }
