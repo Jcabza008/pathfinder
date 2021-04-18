@@ -2,11 +2,11 @@
 #include <unordered_map>
 #include <utility>
 #include <iostream>
-#include <fstream>
 #include <vector>
 
-#include "map.h"
+
 #include "graph.h"
+#include "map.h"
 
 namespace pathfinder {
 
@@ -96,35 +96,11 @@ namespace pathfinder {
     {
         return Coordinates({index % this->dimensions.width, index / this->dimensions.width});
     }
-    
-    Map Map::Parser::parse(std::istream& binaryInput){
-        Map::Dimensions d;
-        binaryInput >> d.height;
-        binaryInput >> d.width;
-        int cap = d.width*d.height;
-        std::vector<int> data(cap);
-        
-        int i = 0;
-        while(binaryInput.read(reinterpret_cast<char *>(&data[i]), cap * sizeof(int))){
-            i++;
-        }
-
-        Map map(data, d);
-        return map;
-    }
-    void Map::Parser::deparse(Map& map, std::ostream& out){
-        out << map.dimensions.height;
-        out << map.dimensions.width;
-        for(auto i : map.data){
-            out << i;
-        }
-    }
 
     bool Map::validCoord(Coordinates coords)
     {
         if (coords.row >= this->dimensions.height || coords.col >= this->dimensions.width)
 			return false;
-
         return true;
     }
 
@@ -143,6 +119,29 @@ namespace pathfinder {
             return 1 + ((startHeight - targetHeight) / c_Negative_Slope_Weight_Correction);
 
         return 1 + (targetHeight - startHeight);
+    }
+
+    Map Map::Parser::parse(std::istream& binaryInput){
+        Map::Dimensions d;
+        /*Parse header info*/
+        binaryInput.read(reinterpret_cast<char*>(d.height), sizeof(d.height));
+        binaryInput.read(reinterpret_cast<char*>(d.width), sizeof(d.width));
+
+        int cap = d.width*d.height;
+        
+        std::vector<int> data(cap);
+        binaryInput.read(reinterpret_cast<char*>(data.data()), cap * sizeof(int));
+        
+        Map map(data, d);
+        return map;
+    }
+
+    void Map::Parser::deparse(Map& map, std::ostream& out){
+        /*get any header info*/
+        out.write(reinterpret_cast<char*>(map.dimensions.height), sizeof(map.dimensions.height));
+        out.write(reinterpret_cast<char*>(map.dimensions.width), sizeof(map.dimensions.width));
+        /*get map info*/
+        out.write(reinterpret_cast<char*>(map.data.data()), sizeof(map.data.data()));
     }
 
 }
