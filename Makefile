@@ -61,7 +61,7 @@ lib/:
 	mkdir -p lib
 
 pathfinder: bin/ lib/main.o $(CORELIBS) $(VIEWLIBS)
-	$(CC) $(CFLAGS) -o bin/pathfinder lib/main.o $(CORELIBS) $(VIEWLIBS) $(SFMLFLAGS) -lpthread
+	$(CC) $(CFLAGS) -o bin/pathfinder lib/main.o $(CORELIBS) $(VIEWLIBS) $(SFMLFLAGS) -lpthread -lboost_program_options
 
 tests: bin/ lib/tests.o $(CORELIBS)
 	$(CC) $(CFLAGS) -o bin/tests lib/tests.o $(CORELIBS) $(SFMLFLAGS) $(GTESTFLAGS) -lpthread

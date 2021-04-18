@@ -33,6 +33,7 @@ $SUDO apt install -y    \
     pkg-config \
     cpp  \
     build-essential  \
+    libboost-all-dev \
     libsfml-dev \
     clang-tidy \
     tree
