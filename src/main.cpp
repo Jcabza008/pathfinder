@@ -19,6 +19,8 @@
 #include <array>
 #include <queue>
 
+#include <boost/program_options.hpp>
+
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Sprite.hpp>
@@ -54,6 +56,7 @@
 
 using namespace pathfinder;
 using namespace pathfinder::view;
+namespace po = boost::program_options;
 
 constexpr ComponentBase::dimension_t
     c_map_width = 1024,
@@ -209,9 +212,35 @@ void run()
     app_window.run();
 }
 
-int main()
+int main(int argc, char** argv)
 {
     configureLogger();
+
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("--help", "produce help message")
+        ("--map-file", po::value<std::string>(), "map file to load")
+        ("--new-map", po::value<bool>(), "create map")
+        ("--algorithm", po::value<std::string>(), "algorithm to user. Supported: dijkstras")
+    ;
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    if (vm.count("--help")) {
+        std::cout << desc << "\n";
+        return 1;
+    }
+
+    if (vm.count("compression")) {
+        std::cout << "Compression level was set to "
+    << vm["compression"].as<int>() << ".\n";
+    } else {
+        std::cout << "Compression level was not set.\n";
+    }
+
+
     run();
 
     return 0;
