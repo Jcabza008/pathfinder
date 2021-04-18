@@ -125,7 +125,7 @@ namespace pathfinder {
     bool Map::validCoord(Coordinates coords)
     {
         if (coords.row >= this->dimensions.height || coords.col >= this->dimensions.width)
-			    return false;
+			return false;
         return true;
     }
 
@@ -145,19 +145,19 @@ namespace pathfinder {
 
         return 1 + (targetHeight - startHeight);
     }
-  
+
     void Map::findMinAndMaxValue()
     {
-          this->maxValue = INT_MIN;
-          this->minValue = INT_MAX;
+        this->maxValue = INT_MIN;
+        this->minValue = INT_MAX;
 
-          for(auto it = this->data.cbegin(); it != this->data.cend(); it++)
-          {
-              if(*it > this->maxValue)
-                  this->maxValue = *it;
-              if(*it < this->minValue)
-                  this->minValue = *it;
-          }
+        for(auto it = this->data.cbegin(); it != this->data.cend(); it++)
+        {
+            if(*it > this->maxValue)
+                this->maxValue = *it;
+            if(*it < this->minValue)
+                this->minValue = *it;
+        }
       }
 
     Map Map::Parser::parse(std::istream& binaryInput){
@@ -183,5 +183,5 @@ namespace pathfinder {
         auto data = map.data.data();
         out.write(reinterpret_cast<char const*>(data), map.data.size() * sizeof(int));
     }
-    
+
 }
