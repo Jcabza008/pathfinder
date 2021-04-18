@@ -75,7 +75,7 @@ namespace pathfinder {
         while(!s.empty())
         {
             auto current = s.top();
-            s.top();
+            s.pop();
             result.push_back(current);
         }
 
