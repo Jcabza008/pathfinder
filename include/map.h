@@ -4,7 +4,7 @@ namespace pathfinder {
 
     constexpr int c_Max_Traversable_Slope = 10;
     constexpr int c_Negative_Slope_Weight_Correction = 2;
-    
+
     class Map : public Graph
     {
         public:
@@ -13,7 +13,7 @@ namespace pathfinder {
             unsigned int width;
             unsigned int height;
         };
-        
+
         struct Coordinates
         {
             unsigned int col;
@@ -26,7 +26,7 @@ namespace pathfinder {
             Map parse(std::istream& input);
             void deparse(Map& mp, std::ostream& output);
         };
-        
+
         Map(Dimensions dim);
         Map(std::vector<int> data, Dimensions dim);
 

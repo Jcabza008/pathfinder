@@ -15,7 +15,7 @@
 namespace pathfinder {
 
     void MapManipulator::setHeight(Map* map, Map::Coordinates coords, int height){
-        bfsMapTraversal(map, map->getIndex(coords.col, coords.row), [&](int index, int level){
+        bfsMapTraversal(map, static_cast<int>(map->getIndex(coords.col, coords.row)), [&](int index, int level){
             if(height > 0)
             {
                 auto newHeight = height - (this->rng->getRandom() * level);
@@ -37,7 +37,7 @@ namespace pathfinder {
     };
 
     void MapManipulator::affectHeight(Map* map, Map::Coordinates coords, int change){
-        bfsMapTraversal(map, map->getIndex(coords.col, coords.row), [&](int index, int level){
+        bfsMapTraversal(map, static_cast<int>(map->getIndex(coords.col, coords.row)), [&](int index, int level){
             if(change > 0)
             {
                 auto newChange = change - (this->rng->getRandom() * level);

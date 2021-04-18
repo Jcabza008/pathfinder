@@ -11,12 +11,15 @@
 
 namespace pathfinder {
 
-    Map::Map(Dimensions dim) : dimensions(dim)
+    Map::Map(Dimensions dim) : dimensions(dim), maxValue(0), minValue(0)
     {
         this->data = std::vector<int>(this->size(), 0);
     };
 
-    Map::Map(std::vector<int> _data, Dimensions dim) : dimensions(dim), data(_data) {}
+    Map::Map(std::vector<int> _data, Dimensions dim) : dimensions(dim), data(_data), maxValue(0), minValue(0)
+    {
+        this->findMinAndMaxValue();
+    }
 
     Map::Dimensions Map::getDimensions()
     {
@@ -61,7 +64,7 @@ namespace pathfinder {
 
     void Map::setData(Coordinates coords, int value)
     {
-        this->setData(this->getIndex(coords.col, coords.row), value);
+        this->setData(static_cast<int>(this->getIndex(coords.col, coords.row)), value);
     }
 
     void Map::setData(int index, int value)
@@ -166,8 +169,7 @@ namespace pathfinder {
         binaryInput.read(reinterpret_cast<char*>(&d.height), sizeof(d.height));
         binaryInput.read(reinterpret_cast<char*>(&d.width), sizeof(d.width));
 
-        int cap = d.width*d.height;
-
+        unsigned int cap = d.width*d.height;
         std::vector<int> data(cap);
         binaryInput.read(reinterpret_cast<char*>(data.data()), cap * sizeof(int));
 

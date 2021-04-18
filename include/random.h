@@ -5,6 +5,7 @@ namespace pathfinder {
     class RandomIntGenerator
     {
         public:
+        virtual ~RandomIntGenerator() {};
         virtual int getRandom() = 0;
     };
 
