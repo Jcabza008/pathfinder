@@ -8,8 +8,8 @@ namespace pathfinder {
     HeightColorProviderImpl::HeightColorProviderImpl(int minHeight, int maxHeight)
     {
         this->maxAbsHeight = std::max(std::abs(minHeight), std::abs(maxHeight));
-        this->positiveSlope = (255 - c_positive_intercept) / this->maxAbsHeight;
-        this->negativeSlope = (255 - c_negative_intercept) / this->maxAbsHeight;
+        this->positiveSlope = static_cast<double>(255 - c_positive_intercept) / static_cast<double>(this->maxAbsHeight);
+        this->negativeSlope = static_cast<double>(255 - c_negative_intercept) / static_cast<double>(this->maxAbsHeight);
     }
 
     RGBColor HeightColorProviderImpl::getColor(int height)
