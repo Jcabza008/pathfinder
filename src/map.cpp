@@ -158,7 +158,7 @@ namespace pathfinder {
             if(*it < this->minValue)
                 this->minValue = *it;
         }
-      }
+    }
 
     Map Map::Parser::parse(std::istream& binaryInput){
         Map::Dimensions d = {};
