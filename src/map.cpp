@@ -98,31 +98,25 @@ namespace pathfinder {
     }
     
     Map Map::Parser::parse(std::istream& binaryInput){
-        binaryInput.seekg(0, binaryInput.end);
-        auto fileLength = binaryInput.tellg();
         Map::Dimensions d;
         binaryInput >> d.height;
         binaryInput >> d.width;
         int cap = d.width*d.height;
         std::vector<int> data(cap);
-        char buf[fileLength];
-        binaryInput.read(buf, fileLength);
-        for(char c : buf){
-            data.push_back((int)c);
+        
+        int i = 0;
+        while(binaryInput.read(reinterpret_cast<char *>(&data[i]), cap * sizeof(int))){
+            i++;
         }
+
         Map map(data, d);
         return map;
     }
-    void Map::Parser::deparse(Map& map, std::string filename){
-        /*Assume file is binary*/
-        std::filebuf fb;
-        if(fb.open(filename, std::ios::binary)){
-            std::ostream out(&fb);
-            out << map.dimensions.height;
-            out << map.dimensions.width;
-            for(auto i : map.data){
-                out << i;
-            }
+    void Map::Parser::deparse(Map& map, std::ostream& out){
+        out << map.dimensions.height;
+        out << map.dimensions.width;
+        for(auto i : map.data){
+            out << i;
         }
     }
 
