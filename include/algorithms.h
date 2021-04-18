@@ -23,7 +23,7 @@ namespace pathfinder {
         virtual std::unordered_map<int, PathData> findPaths(Graph* graph, int start) = 0;
     };
 
-    class DijkstrasAlgorithm : PF_Algoritm
+    class DijkstrasAlgorithm : public PF_Algoritm
     {
         public:
         /**
@@ -47,5 +47,7 @@ namespace pathfinder {
             PathData* data;
         };
     };
+
+    std::vector<int> dijkstrasBacktrack(std::unordered_map<int, PathData> pathData, int target);
 
 }

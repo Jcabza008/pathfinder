@@ -178,3 +178,17 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesUndirected1)
     ASSERT_EQ(paths[8],  PathData({18, 6}));
     ASSERT_EQ(paths[10], PathData({20, 8}));
 }
+
+TEST(dijkstrasBacktrack, test0)
+{
+    std::unordered_map<int, PathData> m;
+    m[0] = PathData({0, -1});
+    m[1] = PathData({1,  0});
+    m[2] = PathData({2,  1});
+    m[3] = PathData({3,  2});
+    m[4] = PathData({4,  3});
+    m[5] = PathData({5,  4});
+
+    auto result = dijkstrasBacktrack(m, 5);
+    ASSERT_EQ(result,  std::vector<int>({0, 1, 2, 3, 4, 5}));
+}
