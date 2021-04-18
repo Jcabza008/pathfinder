@@ -3,15 +3,21 @@
 #include <vector>
 
 #include "graph.h"
+#include "map.h"
 #include "util.h"
 
-using namespace PATHFINDER;
+using namespace pathfinder;
 
 TEST(MapGenerat__Test, outputFile){
     DirectedGraphLinkedListImpl graph;
     auto vertices = graph.getVertices();
     for(int i : vertices){
-        //out png
+
     }
-    ASSERT_TRUE(/*file was created*/);
+}
+
+TEST(MapGenerat__Test, parseInput){
+    std::ifstream file;
+    
+
 }

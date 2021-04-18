@@ -13,13 +13,16 @@ namespace pathfinder {
             unsigned int width;
             unsigned int height;
         };
-
         struct Coordinates
         {
             unsigned int col;
             unsigned int row;
         };
-
+        class Parser
+        {
+            Map parse(std::ifstream& input);
+            std::ofstream& deparse(Map& mp, std::string filename);
+        };
         Map(Dimensions dim);
         Map(std::vector<int> data, Dimensions dim);
 
