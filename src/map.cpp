@@ -3,6 +3,7 @@
 #include <utility>
 #include <iostream>
 #include <vector>
+#include <limits.h>
 
 
 #include "graph.h"
@@ -22,7 +23,7 @@ namespace pathfinder {
         return this->dimensions;
     }
 
-    std::vector<int>& Map::getData()
+    const std::vector<int>& Map::getData() const
     {
         return this->data;
     }
@@ -56,6 +57,30 @@ namespace pathfinder {
     unsigned int Map::size()
     {
         return this->dimensions.width * this->dimensions.height;
+    }
+
+    void Map::setData(Coordinates coords, int value)
+    {
+        this->setData(this->getIndex(coords.col, coords.row), value);
+    }
+
+    void Map::setData(int index, int value)
+    {
+        this->data[index] = value;
+        if(value > this->maxValue)
+            this->maxValue = value;
+        if(value < this->minValue)
+            this->minValue = value;
+    }
+
+    int Map::getMaxValue()
+    {
+        return this->maxValue;
+    }
+
+    int Map::getMinValue()
+    {
+        return this->minValue;
     }
 
     std::vector<Map::Coordinates> Map::getNeighbors(int index)
@@ -100,7 +125,7 @@ namespace pathfinder {
     bool Map::validCoord(Coordinates coords)
     {
         if (coords.row >= this->dimensions.height || coords.col >= this->dimensions.width)
-			return false;
+			    return false;
         return true;
     }
 
@@ -120,6 +145,20 @@ namespace pathfinder {
 
         return 1 + (targetHeight - startHeight);
     }
+  
+    void Map::findMinAndMaxValue()
+    {
+          this->maxValue = INT_MIN;
+          this->minValue = INT_MAX;
+
+          for(auto it = this->data.cbegin(); it != this->data.cend(); it++)
+          {
+              if(*it > this->maxValue)
+                  this->maxValue = *it;
+              if(*it < this->minValue)
+                  this->minValue = *it;
+          }
+      }
 
     Map Map::Parser::parse(std::istream& binaryInput){
         Map::Dimensions d = {};
@@ -144,5 +183,5 @@ namespace pathfinder {
         auto data = map.data.data();
         out.write(reinterpret_cast<char const*>(data), map.data.size() * sizeof(int));
     }
-
+    
 }

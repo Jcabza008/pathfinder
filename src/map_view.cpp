@@ -44,7 +44,7 @@ namespace pathfinder { namespace view {
 		for (dimensiont_t row = 0; row < mapPointCount.y; row++)
 		for (dimensiont_t col = 0; col < mapPointCount.x; col++)
 		{
-			auto position = getLocation(row, col);
+			auto position = getLocation(col, row);
 			auto mapPoint = MapPoint(position, mapPointSize).setTexture(defaultTexture);
 			map.push_back(mapPoint);
 		}
@@ -70,9 +70,9 @@ namespace pathfinder { namespace view {
 		return getMapPoint(coords.x, coords.y);
 	}
 
-	MapView::MapPoint* MapView::getMapPoint(dimension_t row, dimension_t col)
+	MapView::MapPoint* MapView::getMapPoint(dimension_t col, dimension_t row)
 	{
-		return &(map[static_cast<size_t>(row) * mapPointCount.x + col]);
+		return &(map[(static_cast<size_t>(row) * mapPointCount.x) + col]);
 	}
 
 	void MapView::onClick(sf::Event::MouseButtonEvent event)

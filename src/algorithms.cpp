@@ -5,8 +5,8 @@
 #include <vector>
 
 #include "graph.h"
-#include "algorithms.h"
 #include "priority_queue.h"
+#include "algorithms.h"
 
 namespace pathfinder {
 
