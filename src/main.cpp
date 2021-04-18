@@ -99,7 +99,7 @@ void run()
 
     // Map Random Manipulator
     auto featuresCountGenerator = std::make_shared<RandomNormalIntGenerator>(10000, 1500);
-    auto featuresElevationGenerator = std::make_shared<RandomNormalIntGenerator>(0, 100);
+    auto featuresElevationGenerator = std::make_shared<RandomNormalIntGenerator>(150, 75);
     auto mapRandomManip = std::make_shared<MapRandomManipulator>(mapManip.get(), featuresCountGenerator.get(), featuresElevationGenerator.get());
 
     // Map
