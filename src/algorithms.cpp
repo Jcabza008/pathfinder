@@ -59,4 +59,13 @@ namespace pathfinder {
         return paths;
     }
 
+    std::vector<int> dijkstrasBacktrack(std::unordered_map<int, PathData> pathData, int target)
+    {
+        std::vector<int> result;
+
+        // TODO: algorithm
+
+        return result;
+    }
+
 }
