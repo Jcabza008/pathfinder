@@ -16,7 +16,7 @@ namespace pathfinder {
         class Parser
         {
             Map parse(std::istream& input);
-            std::ostream deparse(Map& mp, std::string filename);
+            void deparse(Map& mp, std::string filename);
         };
         struct Coordinates
         {

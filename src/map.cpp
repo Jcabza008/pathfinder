@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <utility>
 #include <iostream>
+#include <fstream>
 #include <vector>
 
 #include "map.h"
@@ -99,25 +100,30 @@ namespace pathfinder {
     Map Map::Parser::parse(std::istream& binaryInput){
         binaryInput.seekg(0, binaryInput.end);
         auto fileLength = binaryInput.tellg();
-        
         Map::Dimensions d;
         binaryInput >> d.height;
         binaryInput >> d.width;
         int cap = d.width*d.height;
-        std::vector<int> data;
-        char* buf = new char [fileLength];
+        std::vector<int> data(cap);
+        char buf[fileLength];
         binaryInput.read(buf, fileLength);
+        for(char c : buf){
+            data.push_back((int)c);
+        }
         Map map(data, d);
         return map;
     }
-    std::ostream& Map::Parser::deparse(Map& map, std::string filename){
+    void Map::Parser::deparse(Map& map, std::string filename){
+        /*Assume file is binary*/
         std::filebuf fb;
-        std::ostream output();
-        output.open(filename);
-        for(auto i : map.getData()){
-            output << i;
+        if(fb.open(filename, std::ios::binary)){
+            std::ostream out(&fb);
+            out << map.dimensions.height;
+            out << map.dimensions.width;
+            for(auto i : map.data){
+                out << i;
+            }
         }
-        return output;
     }
 
     bool Map::validCoord(Coordinates coords)
