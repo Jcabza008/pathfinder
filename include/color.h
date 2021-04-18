@@ -25,8 +25,8 @@ namespace pathfinder {
 
         private:
         int maxAbsHeight;
-        int positiveSlope;
-        int negativeSlope;
+        double positiveSlope;
+        double negativeSlope;
     };
 
 }

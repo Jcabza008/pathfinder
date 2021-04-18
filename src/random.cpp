@@ -4,17 +4,30 @@
 
 namespace pathfinder {
 
-    std::random_device RandomIntGeneratorMT19937::rd;
-    std::mt19937 RandomIntGeneratorMT19937::rng{RandomIntGeneratorMT19937::rd()};
+    std::random_device RandomUniformIntGenerator::rd;
+    std::mt19937 RandomUniformIntGenerator::rng{RandomUniformIntGenerator::rd()};
 
-    RandomIntGeneratorMT19937::RandomIntGeneratorMT19937(int min, int max)
+    std::random_device RandomNormalIntGenerator::rd;
+    std::mt19937 RandomNormalIntGenerator::rng{RandomNormalIntGenerator::rd()};
+
+    RandomUniformIntGenerator::RandomUniformIntGenerator(int min, int max)
     {
-        this->uid = std::uniform_int_distribution<int>(min, max);
+        this->distribution = std::uniform_int_distribution<int>(min, max);
     }
 
-    int RandomIntGeneratorMT19937::getRandom()
+    int RandomUniformIntGenerator::getRandom()
     {
-        return this->uid(this->rng);
+        return this->distribution(this->rng);
+    }
+
+    RandomNormalIntGenerator::RandomNormalIntGenerator(double average, double std)
+    {
+        this->distribution = std::normal_distribution<double>(average, std);
+    }
+
+    int RandomNormalIntGenerator::getRandom()
+    {
+        return static_cast<int>(this->distribution(this->rng));
     }
 
 }
