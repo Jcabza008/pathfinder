@@ -62,8 +62,22 @@ namespace pathfinder {
     std::vector<int> dijkstrasBacktrack(std::unordered_map<int, PathData> pathData, int target)
     {
         std::vector<int> result;
+        std::stack<int> s;
+        s.push(target);
+        auto current = target;
 
-        // TODO: algorithm
+        while (pathData[current].predecesor != -1)
+        {
+            current = pathData[current].predecesor;
+            s.push(current);
+        }
+
+        while(!s.empty())
+        {
+            auto current = s.top();
+            s.top();
+            result.push_back(current);
+        }
 
         return result;
     }
