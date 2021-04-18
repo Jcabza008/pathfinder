@@ -1,8 +1,10 @@
 #include <list>
 #include <unordered_map>
 #include <utility>
+#include <iostream>
 #include <vector>
 #include <limits.h>
+
 
 #include "graph.h"
 #include "map.h"
@@ -123,8 +125,7 @@ namespace pathfinder {
     bool Map::validCoord(Coordinates coords)
     {
         if (coords.row >= this->dimensions.height || coords.col >= this->dimensions.width)
-			return false;
-
+			    return false;
         return true;
     }
 
@@ -144,20 +145,43 @@ namespace pathfinder {
 
         return 1 + (targetHeight - startHeight);
     }
-
+  
     void Map::findMinAndMaxValue()
     {
-        this->maxValue = INT_MIN;
-        this->minValue = INT_MAX;
+          this->maxValue = INT_MIN;
+          this->minValue = INT_MAX;
 
-        for(auto it = this->data.cbegin(); it != this->data.cend(); it++)
-        {
-            if(*it > this->maxValue)
-                this->maxValue = *it;
-            if(*it < this->minValue)
-                this->minValue = *it;
-        }
+          for(auto it = this->data.cbegin(); it != this->data.cend(); it++)
+          {
+              if(*it > this->maxValue)
+                  this->maxValue = *it;
+              if(*it < this->minValue)
+                  this->minValue = *it;
+          }
+      }
+
+    Map Map::Parser::parse(std::istream& binaryInput){
+        Map::Dimensions d = {};
+        /*Parse header info*/
+        binaryInput.read(reinterpret_cast<char*>(&d.height), sizeof(d.height));
+        binaryInput.read(reinterpret_cast<char*>(&d.width), sizeof(d.width));
+
+        int cap = d.width*d.height;
+
+        std::vector<int> data(cap);
+        binaryInput.read(reinterpret_cast<char*>(data.data()), cap * sizeof(int));
+
+        Map map(data, d);
+        return map;
     }
 
-
+    void Map::Parser::deparse(Map& map, std::ostream& out){
+        /*get any header info*/
+        out.write(reinterpret_cast<char const*>(&map.dimensions.height), sizeof(map.dimensions.height));
+        out.write(reinterpret_cast<char const*>(&map.dimensions.width), sizeof(map.dimensions.width));
+        /*get map info*/
+        auto data = map.data.data();
+        out.write(reinterpret_cast<char const*>(data), map.data.size() * sizeof(int));
+    }
+    
 }
