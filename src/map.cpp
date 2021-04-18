@@ -122,7 +122,7 @@ namespace pathfinder {
     }
 
     Map Map::Parser::parse(std::istream& binaryInput){
-        Map::Dimensions d;
+        Map::Dimensions d = {};
         /*Parse header info*/
         binaryInput.read(reinterpret_cast<char*>(&d.height), sizeof(d.height));
         binaryInput.read(reinterpret_cast<char*>(&d.width), sizeof(d.width));
