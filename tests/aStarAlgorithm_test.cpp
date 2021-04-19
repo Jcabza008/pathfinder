@@ -60,3 +60,43 @@ TEST(AStarAlgorithm, findPaths_test1)
 
     ASSERT_EQ(result[map.getIndex(2, 4)].cost, 7);
 }
+
+TEST(AStarAlgorithm, findPaths_test2)
+{
+    std::vector<int> data = {
+         1,  1,  1,
+         1,  1,  2,
+        -1, -1, -1,
+         1,  2,  3,
+         1,  3,  4,
+        -2, -1,  0
+    };
+
+    Map map(data, Map::Dimensions({3, 6}));
+    AStarAlgorithm aStar;
+
+    auto result = aStar.findPaths(map, map.getIndex(0, 0), map.getIndex(2, 4));
+
+    ASSERT_TRUE(result.empty());
+    ASSERT_TRUE(aStar.backtrack(result, map.getIndex(2, 4)).empty());
+}
+
+TEST(AStarAlgorithm, findPaths_test3)
+{
+    std::vector<int> data = {
+        50,  30,  5,  1,  1, -1,  -2,  -1,  1, 20,
+        50,  30,  2,  1,  1, -1,  -2,  -1, -1,  1,
+        40,  30, 20, -1, -1, -1,  -2,  -1,  1,  1,
+        40,  30,  3,  1, -1, -1,  -2,  -1,  1,  1,
+        40,  30,  4,  1, -1, -1,  -2,  -1,  1,  1,
+        40,  30,  0, -1, -1, -1,  -2,  -1,  1,  1
+    };
+
+    Map map(data, Map::Dimensions({10, 6}));
+    AStarAlgorithm aStar;
+
+    auto result = aStar.findPaths(map, map.getIndex(0, 2), map.getIndex(0, 8));
+
+    ASSERT_TRUE(result.empty());
+    ASSERT_TRUE(aStar.backtrack(result, map.getIndex(0, 8)).empty());
+}
