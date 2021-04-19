@@ -34,11 +34,7 @@ namespace pathfinder {
         std::vector<Target> getAdjecent(int index) override;
 
         unsigned int size();
-        void setData(Coordinates coords, int value);
-        void setData(int index, int value);
-        const std::vector<int>& getData() const;
-        int getMaxValue();
-        int getMinValue();
+        std::vector<int>& getData();
         Dimensions getDimensions();
         Coordinates getCoords(int index);
         unsigned int getIndex(unsigned int col, unsigned int row);
@@ -48,12 +44,9 @@ namespace pathfinder {
         private:
         bool validCoord(Coordinates coords);
         int getWeight(Coordinates start, Coordinates target);
-        void findMinAndMaxValue();
 
         Dimensions dimensions;
         std::vector<int> data;
-        int maxValue;
-        int minValue;
     };
 
 }

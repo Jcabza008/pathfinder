@@ -68,11 +68,30 @@
         "version": "0.2.0",
         "configurations": [
             {
-                "name": "(gdb) Launch",
+                "name": "(gdb) PF Create",
                 "type": "cppdbg",
                 "request": "launch",
                 "program": "${workspaceFolder}/bin/pathfinder",
-                "args": [],
+                "args": ["--map-file=debug_map", "--new-map", "--map-width=100", "--map-height=50"],
+                "stopAtEntry": false,
+                "cwd": "${workspaceFolder}",
+                "environment": [],
+                "externalConsole": false,
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing",
+                        "ignoreFailures": true
+                    }
+                ]
+            },
+            {
+                "name": "(gdb) PF Open",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceFolder}/bin/pathfinder",
+                "args": ["--map-file=debug_map"],
                 "stopAtEntry": false,
                 "cwd": "${workspaceFolder}",
                 "environment": [],

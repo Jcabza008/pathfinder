@@ -18,6 +18,9 @@
 #include <random>
 #include <array>
 #include <queue>
+#include <fstream>
+
+#include <boost/program_options.hpp>
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -31,6 +34,7 @@
 #include "log.h"
 
 // view Libs
+#include "config.h"
 #include "texture_provider.h"
 #include "clickable.h"
 #include "drawable.h"
@@ -54,14 +58,15 @@
 
 using namespace pathfinder;
 using namespace pathfinder::view;
+namespace po = boost::program_options;
+
+const char* c_fileExtension = ".pfm";
 
 constexpr ComponentBase::dimension_t
     c_map_width = 1024,
     c_map_height = 686;
 
-constexpr int c_oneTimeAffectHeight = 50;
-
-const char * const c_texturePaths[] = {
+const char* const c_texturePaths[] = {
     "./images/top_bar_background.png",
     "./images/map_point_background.png",
     "./images/map_point_background_selected_0.png",
@@ -71,8 +76,14 @@ const char * const c_texturePaths[] = {
     "./images/bar.png",
     "./images/search.png",
     "./images/up.png",
-    "./images/down.png"
+    "./images/down.png",
+    "./images/clear.png",
+    "./images/random.png"
 };
+
+constexpr double c_percentOfFeaturesPerPointMean = 0.02;
+constexpr double c_percentOfFeaturesPerPointStd = 0.003;
+constexpr double c_percentOfMeanHeightToAffectAtOnce = 0.1;
 
 void configureLogger()
 {
@@ -81,54 +92,93 @@ void configureLogger()
     .showThreadId(true);
 }
 
-void recolorMapView(std::shared_ptr<MapView> mapView, const std::vector<int>& map, MapView::Vector& dimensions, HeightColorProvider& colorProvider)
+std::pair<int, int> findMinAndMaxValue(std::vector<int>& list)
 {
-    for(size_t row = 0; row < dimensions.y; row++)
-        for(size_t col = 0; col < dimensions.x; col++)
+    auto maxValue = INT_MIN;
+    auto minValue = INT_MAX;
+
+    for(auto it = list.cbegin(); it != list.cend(); it++)
+    {
+        if(*it > maxValue)
+            maxValue = *it;
+        if(*it < minValue)
+            minValue = *it;
+    }
+
+    return {minValue, maxValue};
+}
+
+void recolorMapView(Map& map, std::shared_ptr<MapView> mapView)
+{
+    auto minMaxHeight = findMinAndMaxValue(map.getData());
+    HeightColorProviderImpl colorProvider(minMaxHeight.first, minMaxHeight.second);
+
+    for(size_t row = 0; row < map.getDimensions().height; row++)
+        for(size_t col = 0; col < map.getDimensions().width; col++)
         {
-            auto color = colorProvider.getColor(map[row * dimensions.x + col]);
+            auto color = colorProvider.getColor(map.getData()[row * map.getDimensions().width + col]);
             mapView.get()->getMapPoint(col, row)->setColor(sf::Color(color.red, color.green, color.blue));
         }
 }
 
-void run()
+void createFile(std::fstream& file, std::string& filename)
 {
+    file.open(filename, std::ios::out);
+    file.close();
+}
+
+void openFile(std::fstream& file, std::string& filename)
+{
+    file.open(filename, std::ios::in | std::ios::out | std::ios::binary);
+}
+
+void truncateFile(std::fstream& file, std::string& filename)
+{
+    file.open(filename, std::ios::out | std::ios::trunc);
+    file.close();
+}
+
+void run(PathfinderConfig config)
+{
+    // Load or create map
+    auto filename = config.mapFilename;
+    if (filename.find(c_fileExtension) == std::string::npos) {
+        filename += std::string(c_fileExtension);
+    }
+    std::fstream mapFile;
+    if(config.newMap)
+    {
+        createFile(mapFile, filename);
+    }
+    openFile(mapFile, filename);
+
+    Map::Parser parser;
+    auto map = config.newMap ? Map(Map::Dimensions({config.mapWidth, config.mapHeight})) : parser.parse(mapFile);
+
     // Map manipulator
-    auto slopeVariationGenerator = std::make_shared<RandomNormalIntGenerator>(5, 1.5);
-    auto mapManip = std::make_shared<MapManipulator>(slopeVariationGenerator.get());
+    RandomNormalIntGenerator slopeVariationGenerator(config.randomGenConfig.slopeVariationMean, config.randomGenConfig.slopeVariationStd);
+    MapManipulator mapManip(slopeVariationGenerator);
 
     // Map Random Manipulator
-    auto featuresCountGenerator = std::make_shared<RandomNormalIntGenerator>(10000, 1500);
-    auto featuresElevationGenerator = std::make_shared<RandomNormalIntGenerator>(150, 75);
-    auto mapRandomManip = std::make_shared<MapRandomManipulator>(mapManip.get(), featuresCountGenerator.get(), featuresElevationGenerator.get());
-
-    // Map
-    auto map = std::make_shared<Map>(Map::Dimensions({1024, 686}));
-
-    // Generate Random Map
-    auto widthSelectGenerator = std::make_shared<RandomUniformIntGenerator>(0, map.get()->getDimensions().width - 1);
-    auto heightSelectGenerator = std::make_shared<RandomUniformIntGenerator>(0, map.get()->getDimensions().height - 1);
-    mapRandomManip.get()->generateRandomFeatures(map.get(), widthSelectGenerator.get(), heightSelectGenerator.get());
-    mapManip.get()->blur(map.get());
+    RandomNormalIntGenerator featuresCountGenerator(map.size() * c_percentOfFeaturesPerPointMean, map.size() * c_percentOfFeaturesPerPointStd);
+    RandomNormalIntGenerator featuresElevationGenerator(config.randomGenConfig.featuresElevationMean, config.randomGenConfig.featuresElevationStd);
+    RandomUniformIntGenerator widthSelectGenerator(0, static_cast<int>(map.getDimensions().width - 1));
+    RandomUniformIntGenerator heightSelectGenerator(0, static_cast<int>(map.getDimensions().height - 1));
+    MapRandomManipulator mapRandomManip(mapManip, featuresCountGenerator, featuresElevationGenerator);
 
     // auxiliaty variables
     MapView::MapPoint* point_selected = nullptr;
     ComponentBase::Vector point_selected_coords;
     bool searchOn = false;
 
-    // core
-    HeightColorProviderImpl colorProvider(map.get()->getMinValue(), map.get()->getMaxValue());
-
     // window
     AppWindow app_window;
     app_window.create();
 
-
     // components
     auto texture_provider = TextureProvider(std::vector<std::string>(std::begin(c_texturePaths), std::end(c_texturePaths)));
-
     auto map_rect = MapView::Rect({ 1, 35, c_map_width, c_map_height});
-    auto point_count = MapView::Vector({ map.get()->getDimensions().width , map.get()->getDimensions().height });
+    auto point_count = MapView::Vector({ map.getDimensions().width , map.getDimensions().height });
     auto mapView = std::make_shared<MapView>(app_window.getWindow(), map_rect, point_count, texture_provider.getTexture("map_point_background"));
 
     auto topBarTexture = texture_provider.getTexture("top_bar_background");
@@ -138,8 +188,10 @@ void run()
     auto barDivisor0 = std::make_shared<BarDivisor>(app_window.getWindow(), ComponentBase::Vector({40, 2}), texture_provider.getTexture("bar"));
     auto searchButton = std::make_shared<Button>(app_window.getWindow(), ComponentBase::Rect({47, 1, 32, 32}), texture_provider.getTexture("search"));
     auto barDivisor1 = std::make_shared<BarDivisor>(app_window.getWindow(), ComponentBase::Vector({83, 2}), texture_provider.getTexture("bar"));
-    auto upButton = std::make_shared<Button>(app_window.getWindow(), ComponentBase::Rect({90, 1, 32, 32}), texture_provider.getTexture("up"));
-    auto downButton = std::make_shared<Button>(app_window.getWindow(), ComponentBase::Rect({126, 1, 32, 32}), texture_provider.getTexture("down"));
+    auto clearButton = std::make_shared<Button>(app_window.getWindow(), ComponentBase::Rect({90, 1, 32, 32}), texture_provider.getTexture("clear"));
+    auto randomButton = std::make_shared<Button>(app_window.getWindow(), ComponentBase::Rect({126, 1, 32, 32}), texture_provider.getTexture("random"));
+    auto upButton = std::make_shared<Button>(app_window.getWindow(), ComponentBase::Rect({162, 1, 32, 32}), texture_provider.getTexture("up"));
+    auto downButton = std::make_shared<Button>(app_window.getWindow(), ComponentBase::Rect({198, 1, 32, 32}), texture_provider.getTexture("down"));
 
 
     // compose components
@@ -147,13 +199,15 @@ void run()
     topBar.get()->addComponent(barDivisor0);
     topBar.get()->addComponent(searchButton);
     topBar.get()->addComponent(barDivisor1);
+    topBar.get()->addComponent(clearButton);
+    topBar.get()->addComponent(randomButton);
     topBar.get()->addComponent(upButton);
     topBar.get()->addComponent(downButton);
     app_window.addComponent(topBar);
     app_window.addComponent(mapView);
 
     // initial setup
-    recolorMapView(mapView, map.get()->getData(), point_count, colorProvider);
+    recolorMapView(map, mapView);
 
     // hook events
     mapView.get()->onMapPointClicked = [&](auto point, auto coords) {
@@ -162,6 +216,7 @@ void run()
             if(searchOn)
             {
                 // TODO: find path
+
                 // deactivate search
                 searchButton.get()->setColor(sf::Color(255, 255, 255));
                 searchOn = !searchOn;
@@ -173,6 +228,12 @@ void run()
         point_selected = point;
         point_selected_coords = coords;
         point_selected->setTexture(texture_provider.getTexture("map_point_background_selected_1"));
+    };
+
+    saveButton.get()->onButtonClicked = [&]() {
+        truncateFile(mapFile, filename);
+        openFile(mapFile, filename);
+        parser.deparse(map, mapFile);
     };
 
     searchButton.get()->onButtonClicked = [&]() {
@@ -187,32 +248,106 @@ void run()
         searchOn = !searchOn;
     };
 
+    clearButton.get()->onButtonClicked = [&]() {
+        map = Map(map.getDimensions());
+        recolorMapView(map, mapView);
+    };
+
+    randomButton.get()->onButtonClicked = [&]() {
+        mapRandomManip.generateRandomFeatures(map, widthSelectGenerator, heightSelectGenerator);
+        mapManip.blur(map);
+        recolorMapView(map, mapView);
+    };
+
     upButton.get()->onButtonClicked = [&]() {
         if(point_selected == nullptr)
             return;
 
-        mapManip.get()->affectHeight(map.get(), Map::Coordinates({point_selected_coords.x, point_selected_coords.y}), c_oneTimeAffectHeight);
-        colorProvider = HeightColorProviderImpl(map.get()->getMinValue(), map.get()->getMaxValue());
-        recolorMapView(mapView, map.get()->getData(), point_count, colorProvider);
+        mapManip.affectHeight(map, Map::Coordinates({point_selected_coords.x, point_selected_coords.y}),
+            static_cast<int>(std::abs(config.randomGenConfig.featuresElevationMean) * c_percentOfMeanHeightToAffectAtOnce));
+        recolorMapView(map, mapView);
     };
 
     downButton.get()->onButtonClicked = [&]() {
         if(point_selected == nullptr)
             return;
 
-        mapManip.get()->affectHeight(map.get(), Map::Coordinates({point_selected_coords.x, point_selected_coords.y}), (-1) * c_oneTimeAffectHeight);
-        colorProvider = HeightColorProviderImpl(map.get()->getMinValue(), map.get()->getMaxValue());
-        recolorMapView(mapView, map.get()->getData(), point_count, colorProvider);
+        mapManip.affectHeight(map, Map::Coordinates({point_selected_coords.x, point_selected_coords.y}),
+            static_cast<int>((-1) * std::abs(config.randomGenConfig.featuresElevationMean) * c_percentOfMeanHeightToAffectAtOnce));
+        recolorMapView(map, mapView);
     };
 
     // draw until closed
     app_window.run();
+    mapFile.close();
 }
 
-int main()
+int main(int argc, char** argv)
 {
     configureLogger();
-    run();
+
+    PathfinderConfig config = {};
+    config.randomGenConfig = getDefaultTerrainRandomConfig();
+    std::string preset;
+
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("help", "produce help message")
+        ("map-file", po::value<std::string>(&config.mapFilename), "map file to load (required)")
+        ("new-map", "create map")
+        ("map-width", po::value<unsigned int>(&config.mapWidth)->default_value(800), "map width")
+        ("map-height", po::value<unsigned int>(&config.mapHeight)->default_value(600), "map height")
+        ("algorithm", po::value<std::string>(&config.algorithm), "algorithm to user. Supported: dijkstras")
+        ("preset", po::value<std::string>(&preset)->default_value(""), "random gen preset. Ignores random gen parameres. Supported: default, high and low")
+        ("slope-var-mean", po::value<double>(&config.randomGenConfig.slopeVariationMean), "mean of random slope variation")
+        ("slope-var-std", po::value<double>(&config.randomGenConfig.slopeVariationStd), "standard deviation of random slope variation")
+        ("features-elevation-mean", po::value<double>(&config.randomGenConfig.featuresElevationMean), "mean of random features height")
+        ("features-elevation-std", po::value<double>(&config.randomGenConfig.featuresElevationStd), "standard deviation of random features height")
+    ;
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    if(vm.count("help"))
+    {
+        desc.print(std::cout);
+        return 0;
+    }
+
+    if(!vm.count("map-file"))
+    {
+        std::cout << "Parameter --map-file required" << std::endl;
+        return -1;
+    }
+
+    if(vm.count("new-map"))
+    {
+        config.newMap = true;
+        if(config.mapWidth <= 0 || config.mapWidth <= 0)
+        {
+            std::cout << "Parameters --map-width and --map-height must be positive number" << std::endl;
+            return -1;
+        }
+    }
+
+    if(vm.count("preset"))
+    {
+        if(preset == "high")
+        {
+            config.randomGenConfig = getHighTerrainRandomConfig();
+        }
+        else if(preset == "default")
+        {
+            config.randomGenConfig = getDefaultTerrainRandomConfig();
+        }
+        else if(preset == "low")
+        {
+            config.randomGenConfig = getLowTerrainRandomConfig();
+        }
+    }
+
+    run(config);
 
     return 0;
 }
