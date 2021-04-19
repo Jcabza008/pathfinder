@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "graph.h"
+#include "map.h"
 #include "algorithms.h"
 #include "priority_queue.h"
 
@@ -37,7 +38,7 @@ TEST(DijkstrasAlgorithm, findPaths_singleVertices)
     DijkstrasAlgorithm dijkstras;
     auto paths = dijkstras.findPaths(&graph, 0);
 
-    ASSERT_EQ(paths[0], PathData({0, -1}));
+    ASSERT_EQ(paths[0], DijkstrasAlgorithm::PathData({0, -1}));
 }
 
 TEST(DijkstrasAlgorithm, findPaths_noVertices)
@@ -78,13 +79,13 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesDirected0)
     DijkstrasAlgorithm dijkstras;
     auto paths = dijkstras.findPaths(&graph, 0);
 
-    ASSERT_EQ(paths[0], PathData({ 0, -1}));
-    ASSERT_EQ(paths[1], PathData({ 4,  0}));
-    ASSERT_EQ(paths[2], PathData({ 5,  1}));
-    ASSERT_EQ(paths[3], PathData({13,  2}));
-    ASSERT_EQ(paths[4], PathData({22,  3}));
-    ASSERT_EQ(paths[5], PathData({13,  6}));
-    ASSERT_EQ(paths[6], PathData({ 6,  1}));
+    ASSERT_EQ(paths[0], DijkstrasAlgorithm::PathData({ 0, -1}));
+    ASSERT_EQ(paths[1], DijkstrasAlgorithm::PathData({ 4,  0}));
+    ASSERT_EQ(paths[2], DijkstrasAlgorithm::PathData({ 5,  1}));
+    ASSERT_EQ(paths[3], DijkstrasAlgorithm::PathData({13,  2}));
+    ASSERT_EQ(paths[4], DijkstrasAlgorithm::PathData({22,  3}));
+    ASSERT_EQ(paths[5], DijkstrasAlgorithm::PathData({13,  6}));
+    ASSERT_EQ(paths[6], DijkstrasAlgorithm::PathData({ 6,  1}));
 }
 
 TEST(DijkstrasAlgorithm, findPaths_severalVerticesDirected1)
@@ -109,14 +110,14 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesDirected1)
     DijkstrasAlgorithm dijkstras;
     auto paths = dijkstras.findPaths(&graph, 0);
 
-    ASSERT_EQ(paths[0],  PathData({ 0, -1}));
-    ASSERT_EQ(paths[1],  PathData({ 2,  0}));
-    ASSERT_EQ(paths[3],  PathData({ 7,  1}));
-    ASSERT_EQ(paths[4],  PathData({ 3,  1}));
-    ASSERT_EQ(paths[5],  PathData({10,  0}));
-    ASSERT_EQ(paths[6],  PathData({13,  5}));
-    ASSERT_EQ(paths[8],  PathData({34, 10}));
-    ASSERT_EQ(paths[10], PathData({32,  3}));
+    ASSERT_EQ(paths[0],  DijkstrasAlgorithm::PathData({ 0, -1}));
+    ASSERT_EQ(paths[1],  DijkstrasAlgorithm::PathData({ 2,  0}));
+    ASSERT_EQ(paths[3],  DijkstrasAlgorithm::PathData({ 7,  1}));
+    ASSERT_EQ(paths[4],  DijkstrasAlgorithm::PathData({ 3,  1}));
+    ASSERT_EQ(paths[5],  DijkstrasAlgorithm::PathData({10,  0}));
+    ASSERT_EQ(paths[6],  DijkstrasAlgorithm::PathData({13,  5}));
+    ASSERT_EQ(paths[8],  DijkstrasAlgorithm::PathData({34, 10}));
+    ASSERT_EQ(paths[10], DijkstrasAlgorithm::PathData({32,  3}));
 }
 
 TEST(DijkstrasAlgorithm, findPaths_severalVerticesUndirected0)
@@ -139,12 +140,12 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesUndirected0)
     DijkstrasAlgorithm dijkstras;
     auto paths = dijkstras.findPaths(&graph, 1);
 
-    ASSERT_EQ(paths[0], PathData({1,  1}));
-    ASSERT_EQ(paths[1], PathData({0, -1}));
-    ASSERT_EQ(paths[2], PathData({2,  1}));
-    ASSERT_EQ(paths[3], PathData({3,  1}));
-    ASSERT_EQ(paths[4], PathData({5,  3}));
-    ASSERT_EQ(paths[5], PathData({8,  3}));
+    ASSERT_EQ(paths[0], DijkstrasAlgorithm::PathData({1,  1}));
+    ASSERT_EQ(paths[1], DijkstrasAlgorithm::PathData({0, -1}));
+    ASSERT_EQ(paths[2], DijkstrasAlgorithm::PathData({2,  1}));
+    ASSERT_EQ(paths[3], DijkstrasAlgorithm::PathData({3,  1}));
+    ASSERT_EQ(paths[4], DijkstrasAlgorithm::PathData({5,  3}));
+    ASSERT_EQ(paths[5], DijkstrasAlgorithm::PathData({8,  3}));
 }
 
 TEST(DijkstrasAlgorithm, findPaths_severalVerticesUndirected1)
@@ -169,26 +170,27 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesUndirected1)
     DijkstrasAlgorithm dijkstras;
     auto paths = dijkstras.findPaths(&graph, 0);
 
-    ASSERT_EQ(paths[0],  PathData({ 0,-1}));
-    ASSERT_EQ(paths[1],  PathData({ 2, 0}));
-    ASSERT_EQ(paths[3],  PathData({ 5, 4}));
-    ASSERT_EQ(paths[4],  PathData({ 3, 1}));
-    ASSERT_EQ(paths[5],  PathData({10, 0}));
-    ASSERT_EQ(paths[6],  PathData({12, 3}));
-    ASSERT_EQ(paths[8],  PathData({18, 6}));
-    ASSERT_EQ(paths[10], PathData({20, 8}));
+    ASSERT_EQ(paths[0],  DijkstrasAlgorithm::PathData({ 0,-1}));
+    ASSERT_EQ(paths[1],  DijkstrasAlgorithm::PathData({ 2, 0}));
+    ASSERT_EQ(paths[3],  DijkstrasAlgorithm::PathData({ 5, 4}));
+    ASSERT_EQ(paths[4],  DijkstrasAlgorithm::PathData({ 3, 1}));
+    ASSERT_EQ(paths[5],  DijkstrasAlgorithm::PathData({10, 0}));
+    ASSERT_EQ(paths[6],  DijkstrasAlgorithm::PathData({12, 3}));
+    ASSERT_EQ(paths[8],  DijkstrasAlgorithm::PathData({18, 6}));
+    ASSERT_EQ(paths[10], DijkstrasAlgorithm::PathData({20, 8}));
 }
 
 TEST(dijkstrasBacktrack, test0)
 {
-    std::unordered_map<int, PathData> m;
-    m[0] = PathData({0, -1});
-    m[1] = PathData({1,  0});
-    m[2] = PathData({2,  1});
-    m[3] = PathData({3,  2});
-    m[4] = PathData({4,  3});
-    m[5] = PathData({5,  4});
+    DijkstrasAlgorithm dijkstras;
+    std::unordered_map<int, DijkstrasAlgorithm::PathData> m;
+    m[0] = DijkstrasAlgorithm::PathData({0, -1});
+    m[1] = DijkstrasAlgorithm::PathData({1,  0});
+    m[2] = DijkstrasAlgorithm::PathData({2,  1});
+    m[3] = DijkstrasAlgorithm::PathData({3,  2});
+    m[4] = DijkstrasAlgorithm::PathData({4,  3});
+    m[5] = DijkstrasAlgorithm::PathData({5,  4});
 
-    auto result = dijkstrasBacktrack(m, 5);
+    auto result = dijkstras.backtrack(m, 5);
     ASSERT_EQ(result,  std::vector<int>({0, 1, 2, 3, 4, 5}));
 }

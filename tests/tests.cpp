@@ -22,6 +22,7 @@
 #include "map_manip_test.cpp"
 #include "priority_queue_test.cpp"
 #include "dijkstrasAlgorithm_test.cpp"
+#include "aStarAlgorithm_test.cpp"
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);

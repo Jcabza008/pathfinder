@@ -2,30 +2,14 @@
 
 namespace pathfinder {
 
-    struct PathData
-    {
-        int cost;
-        int predecesor;
-    };
-
-    bool operator==(const PathData& lhs, const PathData& rhs);
-
-    class PF_Algoritm
+    class DijkstrasAlgorithm
     {
         public:
-        /**
-         * @brief Finds the shortest weighted paths for a start vertex
-         *        to all other vertices in the graph
-         * @param graph an DirectedGraph
-         * @param start the ID of the vertex to use as start
-         * @return a map from the vertices to the cost and predecesors
-         */
-        virtual std::unordered_map<int, PathData> findPaths(Graph* graph, int start) = 0;
-    };
-
-    class DijkstrasAlgorithm : public PF_Algoritm
-    {
-        public:
+        struct PathData
+        {
+            int cost;
+            int predecesor;
+        };
         /**
          * @brief Default constructor does nothing
          */
@@ -38,7 +22,8 @@ namespace pathfinder {
          * @param start the ID of the vertex to use as start
          * @return a map from the vertices to the cost and predecesors
          */
-        std::unordered_map<int, PathData> findPaths(Graph* graph, int start) override;
+        std::unordered_map<int, PathData> findPaths(Graph* graph, int start);
+        std::vector<int> backtrack(std::unordered_map<int, PathData> pathData, int target);
 
         private:
         struct VertexData
@@ -48,6 +33,32 @@ namespace pathfinder {
         };
     };
 
-    std::vector<int> dijkstrasBacktrack(std::unordered_map<int, PathData> pathData, int target);
+    bool operator==(const DijkstrasAlgorithm::PathData& lhs, const DijkstrasAlgorithm::PathData& rhs);
+
+    class AStarAlgorithm
+    {
+        public:
+        struct PathData
+        {
+            int cost;
+            int fScore;
+            int predecesor;
+        };
+        AStarAlgorithm() {};
+
+        std::unordered_map<int, PathData> findPaths(Map& map, int start, int end);
+        std::vector<int> backtrack(std::unordered_map<int, PathData> pathData, int target);
+
+        private:
+        int heuristic(const Map::Coordinates& src, const Map::Coordinates& end);
+
+        struct VertexData
+        {
+            int index;
+            PathData* data;
+        };
+    };
+
+    bool operator==(const AStarAlgorithm::PathData& lhs, const AStarAlgorithm::PathData& rhs);
 
 }
