@@ -168,6 +168,7 @@ void run(PathfinderConfig config)
 
     Map::Parser parser;
     auto map = config.newMap ? Map(Map::Dimensions({config.mapWidth, config.mapHeight})) : parser.parse(mapFile);
+    pf_log_info("Loaded map. (" + std::to_string(map.getDimensions().width) + ", "+ std::to_string(map.getDimensions().height) + ")");
 
     // Map manipulator
     RandomNormalIntGenerator slopeVariationGenerator(config.randomGenConfig.slopeVariationMean, config.randomGenConfig.slopeVariationStd);
@@ -256,7 +257,8 @@ void run(PathfinderConfig config)
                 {
                     pf_log_info("Start finding path using Dijkstra's Algorithm.");
                     path = dijkstras.backtrack(dijkstras.findPaths(map,
-                        static_cast<int>(map.getIndex(point_selected_coords.x, point_selected_coords.y))),
+                        static_cast<int>(map.getIndex(point_selected_coords.x, point_selected_coords.y)),
+                        static_cast<int>(map.getIndex(coords.x, coords.y))),
                         map.getIndex(point_selected_coords.x, point_selected_coords.y),
                         map.getIndex(coords.x, coords.y));
                     pf_log_info("Finished finding path using Dijkstra's Algorithm.");
