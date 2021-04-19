@@ -12,6 +12,8 @@
 #include "map_manip.h"
 #include "algorithms.h"
 
+constexpr double c_blur_factor = 0.5;
+
 namespace pathfinder {
 
     void MapManipulator::setHeight(Map& map, Map::Coordinates coords, int height){
@@ -40,7 +42,7 @@ namespace pathfinder {
         bfsMapTraversal(map, static_cast<int>(map.getIndex(coords.col, coords.row)), [&](int index, int level){
             if(change > 0)
             {
-                auto newChange = change - (this->rng.getRandom() * level);
+                auto newChange = change - ((this->rng.getRandom()/2) * level);
                 if(newChange < 0)
                     return false;
 
@@ -48,7 +50,7 @@ namespace pathfinder {
             }
             else
             {
-                auto newChange = change + (this->rng.getRandom() * level);
+                auto newChange = change + ((this->rng.getRandom()/2) * level);
                 if(newChange > 0)
                     return false;
 
@@ -66,9 +68,9 @@ namespace pathfinder {
             auto neighbors = map.getNeighbors(i);
             for(auto it = neighbors.cbegin(); it != neighbors.cend(); it++)
             {
-                sum += static_cast<double>(map.getData()[map.getIndex(it->col, it->row)]) * 0.1;
+                sum += static_cast<double>(map.getData()[map.getIndex(it->col, it->row)]) * c_blur_factor;
             }
-            map.getData()[i] = static_cast<int>(sum / (1 + (neighbors.size() * 0.15)));
+            map.getData()[i] = static_cast<int>(sum / (1 + (neighbors.size() * c_blur_factor)));
         }
     }
 
@@ -81,6 +83,7 @@ namespace pathfinder {
                                             static_cast<unsigned int>(heightCoordGenerator.getRandom())});
             auto height = this->featuresElevationGenerator.getRandom();
             this->mapManip.setHeight(map, coords, height);
+            on_Manipulated();
         }
     }
 

@@ -72,7 +72,7 @@
                 "type": "cppdbg",
                 "request": "launch",
                 "program": "${workspaceFolder}/bin/pathfinder",
-                "args": ["--map-file=debug_map", "--new-map", "--map-width=100", "--map-height=50"],
+                "args": ["--map-file=debug_map", "--new-map", "--map-width=500", "--map-height=200"],
                 "stopAtEntry": false,
                 "cwd": "${workspaceFolder}",
                 "environment": [],

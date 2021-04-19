@@ -20,6 +20,8 @@ namespace pathfinder {
         unsigned int mapWidth;
         unsigned int mapHeight;
         std::string algorithm;
+        bool visual;
+        int logLevel;
 
         RandomGeneratorConfig randomGenConfig;
     };

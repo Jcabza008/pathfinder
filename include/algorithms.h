@@ -22,8 +22,8 @@ namespace pathfinder {
          * @param start the ID of the vertex to use as start
          * @return a map from the vertices to the cost and predecesors
          */
-        std::unordered_map<int, PathData> findPaths(Graph* graph, int start);
-        std::vector<int> backtrack(std::unordered_map<int, PathData> pathData, int target);
+        std::unordered_map<int, PathData> findPaths(Graph& graph, int start);
+        std::vector<int> backtrack(std::unordered_map<int, PathData> pathData, int src, int target);
 
         private:
         struct VertexData

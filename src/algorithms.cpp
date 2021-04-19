@@ -16,9 +16,9 @@ namespace pathfinder {
         return lhs.cost == rhs.cost && lhs.predecesor == rhs.predecesor;
     }
 
-    std::unordered_map<int, DijkstrasAlgorithm::PathData> DijkstrasAlgorithm::findPaths(Graph* graph, int start)
+    std::unordered_map<int, DijkstrasAlgorithm::PathData> DijkstrasAlgorithm::findPaths(Graph& graph, int start)
     {
-        auto vertices = graph->getVertices();
+        auto vertices = graph.getVertices();
         std::unordered_map<int, bool> visited;
         std::unordered_map<int, PathData> paths;
         PriorityQueue<VertexData> queue(
@@ -43,7 +43,7 @@ namespace pathfinder {
             queue.pop();
             visited[vertex.index] = true;
 
-            auto neighbors = graph->getAdjecent(vertex.index);
+            auto neighbors = graph.getAdjecent(vertex.index);
             for(auto it = neighbors.cbegin(); it != neighbors.cend(); it++)
             {
                 if(visited[it->to])
@@ -59,7 +59,7 @@ namespace pathfinder {
         return paths;
     }
 
-    std::vector<int> DijkstrasAlgorithm::backtrack(std::unordered_map<int, PathData> pathData, int target)
+    std::vector<int> DijkstrasAlgorithm::backtrack(std::unordered_map<int, PathData> pathData, int src, int target)
     {
         std::vector<int> result;
         std::stack<int> s;
@@ -70,6 +70,11 @@ namespace pathfinder {
         {
             current = pathData[current].predecesor;
             s.push(current);
+        }
+
+        if(current != src)
+        {
+            return result;
         }
 
         while(!s.empty())
@@ -141,10 +146,14 @@ namespace pathfinder {
 
     std::vector<int> AStarAlgorithm::backtrack(std::unordered_map<int, PathData> pathData, int target)
     {
+
         std::vector<int> result;
         std::stack<int> s;
         s.push(target);
         auto current = target;
+
+        if(pathData.empty())
+            return result;
 
         while (pathData[current].predecesor != -1)
         {

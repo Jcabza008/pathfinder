@@ -36,7 +36,7 @@ TEST(DijkstrasAlgorithm, findPaths_singleVertices)
         .WillRepeatedly(Invoke([&](int id){ return adjTable[id]; }));
 
     DijkstrasAlgorithm dijkstras;
-    auto paths = dijkstras.findPaths(&graph, 0);
+    auto paths = dijkstras.findPaths(graph, 0);
 
     ASSERT_EQ(paths[0], DijkstrasAlgorithm::PathData({0, -1}));
 }
@@ -53,7 +53,7 @@ TEST(DijkstrasAlgorithm, findPaths_noVertices)
         .WillRepeatedly(Invoke([&](int id){ return adjTable[id]; }));
 
     DijkstrasAlgorithm dijkstras;
-    auto paths = dijkstras.findPaths(&graph, 0);
+    auto paths = dijkstras.findPaths(graph, 0);
 
     ASSERT_TRUE(paths.empty());
 }
@@ -77,7 +77,7 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesDirected0)
         .WillRepeatedly(Invoke([&](int id){ return adjTable[id]; }));
 
     DijkstrasAlgorithm dijkstras;
-    auto paths = dijkstras.findPaths(&graph, 0);
+    auto paths = dijkstras.findPaths(graph, 0);
 
     ASSERT_EQ(paths[0], DijkstrasAlgorithm::PathData({ 0, -1}));
     ASSERT_EQ(paths[1], DijkstrasAlgorithm::PathData({ 4,  0}));
@@ -108,7 +108,7 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesDirected1)
         .WillRepeatedly(Invoke([&](int id){ return adjTable[id]; }));
 
     DijkstrasAlgorithm dijkstras;
-    auto paths = dijkstras.findPaths(&graph, 0);
+    auto paths = dijkstras.findPaths(graph, 0);
 
     ASSERT_EQ(paths[0],  DijkstrasAlgorithm::PathData({ 0, -1}));
     ASSERT_EQ(paths[1],  DijkstrasAlgorithm::PathData({ 2,  0}));
@@ -138,7 +138,7 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesUndirected0)
         .WillRepeatedly(Invoke([&](int id){ return adjTable[id]; }));
 
     DijkstrasAlgorithm dijkstras;
-    auto paths = dijkstras.findPaths(&graph, 1);
+    auto paths = dijkstras.findPaths(graph, 1);
 
     ASSERT_EQ(paths[0], DijkstrasAlgorithm::PathData({1,  1}));
     ASSERT_EQ(paths[1], DijkstrasAlgorithm::PathData({0, -1}));
@@ -168,7 +168,7 @@ TEST(DijkstrasAlgorithm, findPaths_severalVerticesUndirected1)
         .WillRepeatedly(Invoke([&](int id){ return adjTable[id]; }));
 
     DijkstrasAlgorithm dijkstras;
-    auto paths = dijkstras.findPaths(&graph, 0);
+    auto paths = dijkstras.findPaths(graph, 0);
 
     ASSERT_EQ(paths[0],  DijkstrasAlgorithm::PathData({ 0,-1}));
     ASSERT_EQ(paths[1],  DijkstrasAlgorithm::PathData({ 2, 0}));
@@ -191,6 +191,6 @@ TEST(dijkstrasBacktrack, test0)
     m[4] = DijkstrasAlgorithm::PathData({4,  3});
     m[5] = DijkstrasAlgorithm::PathData({5,  4});
 
-    auto result = dijkstras.backtrack(m, 5);
+    auto result = dijkstras.backtrack(m, 0, 5);
     ASSERT_EQ(result,  std::vector<int>({0, 1, 2, 3, 4, 5}));
 }
