@@ -5,17 +5,18 @@
 #include <vector>
 
 #include "graph.h"
+#include "map.h"
 #include "priority_queue.h"
 #include "algorithms.h"
 
 namespace pathfinder {
 
-    bool operator==(const PathData& lhs, const PathData& rhs)
+    bool operator==(const DijkstrasAlgorithm::PathData& lhs, const DijkstrasAlgorithm::PathData& rhs)
     {
         return lhs.cost == rhs.cost && lhs.predecesor == rhs.predecesor;
     }
 
-    std::unordered_map<int, PathData> DijkstrasAlgorithm::findPaths(Graph* graph, int start)
+    std::unordered_map<int, DijkstrasAlgorithm::PathData> DijkstrasAlgorithm::findPaths(Graph* graph, int start)
     {
         auto vertices = graph->getVertices();
         std::unordered_map<int, bool> visited;
@@ -58,7 +59,7 @@ namespace pathfinder {
         return paths;
     }
 
-    std::vector<int> dijkstrasBacktrack(std::unordered_map<int, PathData> pathData, int target)
+    std::vector<int> DijkstrasAlgorithm::backtrack(std::unordered_map<int, PathData> pathData, int target)
     {
         std::vector<int> result;
         std::stack<int> s;
@@ -81,64 +82,56 @@ namespace pathfinder {
         return result;
     }
 
-    int AStarAlgorithm::heuristic(Graph* graph){
-        /* One option is to calculate linear distance from someNeighbor to end */
-        int start = graph->getVertices()[(int)startPos];
-        int end = graph->getVertices()[(int)targetPos];
-        /* Consider also the manhattan approach since we have 8-way movement */
+    int AStarAlgorithm::heuristic(const Map::Coordinates& src, const Map::Coordinates& end){
+        return static_cast<int>(std::sqrt(std::pow((end.col - src.col), 2) + std::pow((end.row - src.row), 2)));
     }
     
-    const int& heuristic(const int & xDest, const int & yDest) const
-    {
-        int xd, yd, d;
-        xd=xDest-start;
-        yd=yDest-start;         
-
-        // Euclidian Distance
-        d = static_cast<int>(std::sqrt(xd*xd + yd*yd));
-
-        // Manhattan distance
-        //d=abs(xd)+abs(yd);
-        
-        // Chebyshev distance
-        //d=max(abs(xd), abs(yd));
-
-        return d;
+    int AStarAlgorithm::calcF(int cost, const Map::Coordinates& src, const Map::Coordinates& end){
+        return cost + heuristic(src, end);
     }
-    
-    std::unordered_map<int, PathData> AStarAlgorithm::findPaths(Graph* graph, int start)
+
+    std::unordered_map<int, PathData> AStarAlgorithm::findPaths(Map& map, int start, int end)
     {
-        auto vertices = graph->getVertices();
+        auto vertices = map.getVertices();
         std::unordered_map<int, bool> visited;
-        std::unordered_map<int, PathData> paths;
+        std::unordered_map<int, VertexData> paths;
         PriorityQueue<VertexData> queue(
             [](VertexData lhs, VertexData rhs){
-                return lhs.data->cost < rhs.data->cost;
+                return lhs.fScore < rhs.fScore;
             });
         for(auto it = vertices.cbegin(); it != vertices.cend(); it++)
         {
             auto cost = INT_MAX;
             if(*it == start)
                 cost = 0;
-
-            paths.insert({*it, PathData{cost, -1}});
-            queue.push({*it, &paths[*it]});
+            paths.insert({*it, VertexData{*it,}});
         }
+        queue.push({start, calcF(0, map.getCoords(start), map.getCoords(end)), &paths[start]});
         while(!queue.empty())
         {
             queue.reorder();
             auto vertex = queue.top();
             queue.pop();
+            if(it->to == end){ return paths; }
             visited[vertex.index] = true;
 
-            auto neighbors = graph->getAdjecent(vertex.index);
+            auto neighbors = map.getAdjecent(vertex.index);
             for(auto it = neighbors.cbegin(); it != neighbors.cend(); it++)
             {
-                if(visited[it->to])
-                    continue;
-
-                //https://github.com/daancode/a-star/blob/master/source/AStar.cpp
-                if(vertex.data->cost + heuristic(graph) < paths[it->to].cost)
+                auto tentativeCost = vertex.data->cost + it->weight;
+                if(tentativeCost < paths[it->to].cost)
+                {
+                    paths[it->to].predecesor = vertex.index;
+                    paths[it->to].cost = tentativeCost;
+                    auto f = calcF(tentativeCost, map.getCoords(it->to), map.getCoords(end));
+                    queue.push({it->to, f, &paths[it->to]});
+                }
+                
+                if(!visited[it->to] && calcF(paths[it->to].cost, map.getCoords(it->to), map.getCoords(end)))
+                {
+                    
+                }
+                if(vertex.data->cost + heuristic() < paths[it->to].cost)
                 {
                     paths[it->to].cost = vertex.data->cost + it->weight;
                     paths[it->to].predecesor = vertex.index;

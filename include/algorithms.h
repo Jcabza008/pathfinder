@@ -10,20 +10,7 @@ namespace pathfinder {
 
     bool operator==(const PathData& lhs, const PathData& rhs);
 
-    class PF_Algoritm
-    {
-        public:
-        /**
-         * @brief Finds the shortest weighted paths for a start vertex
-         *        to all other vertices in the graph
-         * @param graph an DirectedGraph
-         * @param start the ID of the vertex to use as start
-         * @return a map from the vertices to the cost and predecesors
-         */
-        virtual std::unordered_map<int, PathData> findPaths(Graph* graph, int start) = 0;
-    };
-
-    class DijkstrasAlgorithm : public PF_Algoritm
+    class DijkstrasAlgorithm
     {
         public:
         /**
@@ -39,6 +26,7 @@ namespace pathfinder {
          * @return a map from the vertices to the cost and predecesors
          */
         std::unordered_map<int, PathData> findPaths(Graph* graph, int start) override;
+        std::vector<int> backtrack(std::unordered_map<int, PathData> pathData, int target);
 
         private:
         struct VertexData
@@ -48,19 +36,19 @@ namespace pathfinder {
         };
     };
 
-    std::vector<int> dijkstrasBacktrack(std::unordered_map<int, PathData> pathData, int target);
 
-    class AStarAlgorithm : public PF_Algoritm
+    class AStarAlgorithm
     {
         AStarAlgorithm() {};
 
-        std::unordered_map<int, PathData> findPaths(Graph* graph, int start) override;
+        std::unordered_map<int, PathData> findPaths(Map& map, int start) override;
 
         private:
         int heuristic();
         struct VertexData
         {
             int index;
+            int fScore;
             PathData* data;
         }
     }
