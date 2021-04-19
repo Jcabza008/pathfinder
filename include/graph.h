@@ -8,6 +8,8 @@ namespace pathfinder
     struct Target {
         int to;
         int weight;
+
+        //int distance; -->each node needs to have a distance from the end for "heuristic in A*"
     };
 
     /**
