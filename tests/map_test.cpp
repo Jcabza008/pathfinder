@@ -142,9 +142,25 @@ TEST(Map, getAdjecent_Test3)
     ASSERT_TRUE(equalVectorsUnordered(adjecent, std::vector<Target>({{121, 1}, {122, 2}, {123, 3}, {137, 1}, {139, 2}, {153, 2}, {154, 3}})));
 }
 
-TEST(Map, fParse_Deparse)
+TEST(MapParser, fParseDeparse_Test0)
 {
     std::vector<int> data = {0,1,2,3};
+    Map map(data, Map::Dimensions({2, 2}));
+
+    std::stringstream file;
+    Map::Parser parser;
+    parser.deparse(map, file);
+
+    auto resultmap = parser.parse(file);
+
+    ASSERT_EQ(map.getDimensions().width, resultmap.getDimensions().width);
+    ASSERT_EQ(map.getDimensions().height, resultmap.getDimensions().height);
+    ASSERT_EQ(map.getData(), resultmap.getData());
+}
+
+TEST(MapParser, fParseDeparse_Test1)
+{
+    std::vector<int> data = {-5,1,2,3};
     Map map(data, Map::Dimensions({2, 2}));
 
     std::stringstream file;

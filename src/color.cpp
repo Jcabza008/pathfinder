@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include "color.h"
 
-namespace pathfinder {
+namespace pathfinder { namespace view {
 
     HeightColorProviderImpl::HeightColorProviderImpl(int minHeight, int maxHeight)
     {
@@ -23,4 +23,4 @@ namespace pathfinder {
         return RGBColor{red, green, blue};
     }
 
-}
+}}

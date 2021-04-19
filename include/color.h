@@ -3,7 +3,7 @@
 constexpr int c_positive_intercept = 0;
 constexpr int c_negative_intercept = 64;
 
-namespace pathfinder {
+namespace pathfinder { namespace view {
 
     struct RGBColor {
         uint8_t red;
@@ -29,4 +29,4 @@ namespace pathfinder {
         double negativeSlope;
     };
 
-}
+}}

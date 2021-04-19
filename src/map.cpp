@@ -11,22 +11,19 @@
 
 namespace pathfinder {
 
-    Map::Map(Dimensions dim) : dimensions(dim), maxValue(0), minValue(0)
+    Map::Map(Dimensions dim) : dimensions(dim)
     {
         this->data = std::vector<int>(this->size(), 0);
     };
 
-    Map::Map(std::vector<int> _data, Dimensions dim) : dimensions(dim), data(_data), maxValue(0), minValue(0)
-    {
-        this->findMinAndMaxValue();
-    }
+    Map::Map(std::vector<int> _data, Dimensions dim) : dimensions(dim), data(_data) {}
 
     Map::Dimensions Map::getDimensions()
     {
         return this->dimensions;
     }
 
-    const std::vector<int>& Map::getData() const
+    std::vector<int>& Map::getData()
     {
         return this->data;
     }
@@ -60,30 +57,6 @@ namespace pathfinder {
     unsigned int Map::size()
     {
         return this->dimensions.width * this->dimensions.height;
-    }
-
-    void Map::setData(Coordinates coords, int value)
-    {
-        this->setData(static_cast<int>(this->getIndex(coords.col, coords.row)), value);
-    }
-
-    void Map::setData(int index, int value)
-    {
-        this->data[index] = value;
-        if(value > this->maxValue)
-            this->maxValue = value;
-        if(value < this->minValue)
-            this->minValue = value;
-    }
-
-    int Map::getMaxValue()
-    {
-        return this->maxValue;
-    }
-
-    int Map::getMinValue()
-    {
-        return this->minValue;
     }
 
     std::vector<Map::Coordinates> Map::getNeighbors(int index)
@@ -147,20 +120,6 @@ namespace pathfinder {
             return 1 + ((startHeight - targetHeight) / c_Negative_Slope_Weight_Correction);
 
         return 1 + (targetHeight - startHeight);
-    }
-
-    void Map::findMinAndMaxValue()
-    {
-        this->maxValue = INT_MIN;
-        this->minValue = INT_MAX;
-
-        for(auto it = this->data.cbegin(); it != this->data.cend(); it++)
-        {
-            if(*it > this->maxValue)
-                this->maxValue = *it;
-            if(*it < this->minValue)
-                this->minValue = *it;
-        }
     }
 
     Map Map::Parser::parse(std::istream& binaryInput){
