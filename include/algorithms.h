@@ -2,17 +2,14 @@
 
 namespace pathfinder {
 
-    struct PathData
-    {
-        int cost;
-        int predecesor;
-    };
-
-    bool operator==(const PathData& lhs, const PathData& rhs);
-
     class DijkstrasAlgorithm
     {
         public:
+        struct PathData
+        {
+            int cost;
+            int predecesor;
+        };
         /**
          * @brief Default constructor does nothing
          */
@@ -25,7 +22,7 @@ namespace pathfinder {
          * @param start the ID of the vertex to use as start
          * @return a map from the vertices to the cost and predecesors
          */
-        std::unordered_map<int, PathData> findPaths(Graph* graph, int start) override;
+        std::unordered_map<int, PathData> findPaths(Graph* graph, int start);
         std::vector<int> backtrack(std::unordered_map<int, PathData> pathData, int target);
 
         private:
@@ -36,25 +33,32 @@ namespace pathfinder {
         };
     };
 
+    bool operator==(const DijkstrasAlgorithm::PathData& lhs, const DijkstrasAlgorithm::PathData& rhs);
 
     class AStarAlgorithm
     {
+        public:
+        struct PathData
+        {
+            int cost;
+            int fScore;
+            int predecesor;
+        };
         AStarAlgorithm() {};
 
-        std::unordered_map<int, PathData> findPaths(Map& map, int start) override;
+        std::unordered_map<int, PathData> findPaths(Map& map, int start, int end);
+        std::vector<int> backtrack(std::unordered_map<int, PathData> pathData, int target);
 
         private:
-        int heuristic();
+        int heuristic(const Map::Coordinates& src, const Map::Coordinates& end);
+
         struct VertexData
         {
             int index;
-            int fScore;
             PathData* data;
-        }
-    }
+        };
+    };
 
-    std::vector<int> aStarBacktrack(std::unordered_map<int, PathData> pathData, int target);
-
-
+    bool operator==(const AStarAlgorithm::PathData& lhs, const AStarAlgorithm::PathData& rhs);
 
 }

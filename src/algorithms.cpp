@@ -82,37 +82,41 @@ namespace pathfinder {
         return result;
     }
 
-    int AStarAlgorithm::heuristic(const Map::Coordinates& src, const Map::Coordinates& end){
+    int AStarAlgorithm::heuristic(const Map::Coordinates& src, const Map::Coordinates& end)
+    {
         return static_cast<int>(std::sqrt(std::pow((end.col - src.col), 2) + std::pow((end.row - src.row), 2)));
     }
-    
-    int AStarAlgorithm::calcF(int cost, const Map::Coordinates& src, const Map::Coordinates& end){
-        return cost + heuristic(src, end);
-    }
 
-    std::unordered_map<int, PathData> AStarAlgorithm::findPaths(Map& map, int start, int end)
+    std::unordered_map<int, AStarAlgorithm::PathData> AStarAlgorithm::findPaths(Map& map, int start, int end)
     {
         auto vertices = map.getVertices();
         std::unordered_map<int, bool> visited;
-        std::unordered_map<int, VertexData> paths;
+        std::unordered_map<int, PathData> paths;
         PriorityQueue<VertexData> queue(
             [](VertexData lhs, VertexData rhs){
-                return lhs.fScore < rhs.fScore;
+                return lhs.data->fScore < rhs.data->fScore;
             });
         for(auto it = vertices.cbegin(); it != vertices.cend(); it++)
         {
             auto cost = INT_MAX;
+            auto fScore = INT_MAX;
             if(*it == start)
+            {
                 cost = 0;
-            paths.insert({*it, VertexData{*it,}});
+                fScore = this->heuristic(map.getCoords(start), map.getCoords(end));
+            }
+            paths.insert({*it, PathData{cost, fScore, -1}});
+            visited[*it] = true;
         }
-        queue.push({start, calcF(0, map.getCoords(start), map.getCoords(end)), &paths[start]});
+        queue.push({start, &paths[start]});
+        visited[start] = false;
+
         while(!queue.empty())
         {
             queue.reorder();
             auto vertex = queue.top();
             queue.pop();
-            if(it->to == end){ return paths; }
+            if(vertex.index == end){ return paths; } // this backtrack
             visited[vertex.index] = true;
 
             auto neighbors = map.getAdjecent(vertex.index);
@@ -123,22 +127,39 @@ namespace pathfinder {
                 {
                     paths[it->to].predecesor = vertex.index;
                     paths[it->to].cost = tentativeCost;
-                    auto f = calcF(tentativeCost, map.getCoords(it->to), map.getCoords(end));
-                    queue.push({it->to, f, &paths[it->to]});
-                }
-                
-                if(!visited[it->to] && calcF(paths[it->to].cost, map.getCoords(it->to), map.getCoords(end)))
-                {
-                    
-                }
-                if(vertex.data->cost + heuristic() < paths[it->to].cost)
-                {
-                    paths[it->to].cost = vertex.data->cost + it->weight;
-                    paths[it->to].predecesor = vertex.index;
+                    paths[it->to].fScore = tentativeCost + this->heuristic(map.getCoords(it->to), map.getCoords(end));
+                    if(visited[it->to])
+                    {
+                        visited[it->to] = false;
+                        queue.push({it->to, &paths[it->to]});
+                    }
                 }
             }
         }
-        return paths;
+        return std::unordered_map<int, PathData>();
+    }
+
+    std::vector<int> AStarAlgorithm::backtrack(std::unordered_map<int, PathData> pathData, int target)
+    {
+        std::vector<int> result;
+        std::stack<int> s;
+        s.push(target);
+        auto current = target;
+
+        while (pathData[current].predecesor != -1)
+        {
+            current = pathData[current].predecesor;
+            s.push(current);
+        }
+
+        while(!s.empty())
+        {
+            auto current = s.top();
+            s.pop();
+            result.push_back(current);
+        }
+
+        return result;
     }
 
 
