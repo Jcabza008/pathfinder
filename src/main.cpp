@@ -256,7 +256,7 @@ void run(PathfinderConfig config)
                 {
                     pf_log_info("Start finding path using Dijkstra's Algorithm.");
                     path = dijkstras.backtrack(dijkstras.findPaths(map,
-                        map.getIndex(point_selected_coords.x, point_selected_coords.y)),
+                        static_cast<int>(map.getIndex(point_selected_coords.x, point_selected_coords.y))),
                         map.getIndex(point_selected_coords.x, point_selected_coords.y),
                         map.getIndex(coords.x, coords.y));
                     pf_log_info("Finished finding path using Dijkstra's Algorithm.");
@@ -304,12 +304,12 @@ void run(PathfinderConfig config)
     };
 
     randomButton.get()->onButtonClicked = [&]() {
-        pf_log_info("Start generating random map. (" + std::string(map.getDimensions().width) + ", "
-            + std::string(map.getDimensions().height) + ") - " + "Visualization: " + std::string(config.visual));
+        pf_log_info("Start generating random map. (" + std::to_string(map.getDimensions().width) + ", "
+            + std::to_string(map.getDimensions().height) + ") - " + "Visualization: " + std::to_string(config.visual));
         mapRandomManip.generateRandomFeatures(map, widthSelectGenerator, heightSelectGenerator);
         mapManip.blur(map);
-        pf_log_info("Finished generating random map. (" + std::string(map.getDimensions().width) + ", "
-            + std::string(map.getDimensions().height) + ") - " + "Visualization: " + std::string(config.visual));
+        pf_log_info("Finished generating random map. (" + std::to_string(map.getDimensions().width) + ", "
+            + std::to_string(map.getDimensions().height) + ") - " + "Visualization: " + std::to_string(config.visual));
         recolorMapView(map, mapView);
     };
 

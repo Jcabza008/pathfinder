@@ -23,7 +23,7 @@ namespace pathfinder{
 
         void generateRandomFeatures(Map& map, RandomIntGenerator& widthCoordGenerator, RandomIntGenerator& heightCoordGenerator);
 
-        std::function<void()> on_Manipulated;
+        std::function<void()> on_Manipulated = []() {};
 
         private:
         MapManipulator& mapManip;
