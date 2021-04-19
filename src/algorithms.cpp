@@ -16,7 +16,7 @@ namespace pathfinder {
         return lhs.cost == rhs.cost && lhs.predecesor == rhs.predecesor;
     }
 
-    std::unordered_map<int, DijkstrasAlgorithm::PathData> DijkstrasAlgorithm::findPaths(Graph& graph, int start)
+    std::unordered_map<int, DijkstrasAlgorithm::PathData> DijkstrasAlgorithm::findPaths(Graph& graph, int src, int target)
     {
         auto vertices = graph.getVertices();
         std::unordered_map<int, bool> visited;
@@ -29,7 +29,7 @@ namespace pathfinder {
         for(auto it = vertices.cbegin(); it != vertices.cend(); it++)
         {
             auto cost = INT_MAX;
-            if(*it == start)
+            if(*it == src)
                 cost = 0;
 
             paths.insert({*it, PathData{cost, -1}});
@@ -42,6 +42,7 @@ namespace pathfinder {
             auto vertex = queue.top();
             queue.pop();
             visited[vertex.index] = true;
+            if(vertex.index == target) { return paths; }
 
             auto neighbors = graph.getAdjecent(vertex.index);
             for(auto it = neighbors.cbegin(); it != neighbors.cend(); it++)
@@ -56,7 +57,7 @@ namespace pathfinder {
                 }
             }
         }
-        return paths;
+        return std::unordered_map<int, PathData>();
     }
 
     std::vector<int> DijkstrasAlgorithm::backtrack(std::unordered_map<int, PathData> pathData, int src, int target)
@@ -66,15 +67,13 @@ namespace pathfinder {
         s.push(target);
         auto current = target;
 
+        if(pathData.empty())
+            return result;
+
         while (pathData[current].predecesor != -1)
         {
             current = pathData[current].predecesor;
             s.push(current);
-        }
-
-        if(current != src)
-        {
-            return result;
         }
 
         while(!s.empty())
@@ -87,12 +86,12 @@ namespace pathfinder {
         return result;
     }
 
-    int AStarAlgorithm::heuristic(const Map::Coordinates& src, const Map::Coordinates& end)
+    int AStarAlgorithm::heuristic(const Map::Coordinates& src, const Map::Coordinates& target)
     {
-        return static_cast<int>(std::sqrt(std::pow((end.col - src.col), 2) + std::pow((end.row - src.row), 2)));
+        return static_cast<int>(std::sqrt(std::pow((target.col - src.col), 2) + std::pow((target.row - src.row), 2)));
     }
 
-    std::unordered_map<int, AStarAlgorithm::PathData> AStarAlgorithm::findPaths(Map& map, int start, int end)
+    std::unordered_map<int, AStarAlgorithm::PathData> AStarAlgorithm::findPaths(Map& map, int src, int target)
     {
         auto vertices = map.getVertices();
         std::unordered_map<int, bool> visited;
@@ -105,23 +104,23 @@ namespace pathfinder {
         {
             auto cost = INT_MAX;
             auto fScore = INT_MAX;
-            if(*it == start)
+            if(*it == src)
             {
                 cost = 0;
-                fScore = this->heuristic(map.getCoords(start), map.getCoords(end));
+                fScore = this->heuristic(map.getCoords(src), map.getCoords(target));
             }
             paths.insert({*it, PathData{cost, fScore, -1}});
             visited[*it] = true;
         }
-        queue.push({start, &paths[start]});
-        visited[start] = false;
+        queue.push({src, &paths[src]});
+        visited[src] = false;
 
         while(!queue.empty())
         {
             queue.reorder();
             auto vertex = queue.top();
             queue.pop();
-            if(vertex.index == end){ return paths; } // this backtrack
+            if(vertex.index == target){ return paths; } // this backtrack
             visited[vertex.index] = true;
 
             auto neighbors = map.getAdjecent(vertex.index);
@@ -132,7 +131,7 @@ namespace pathfinder {
                 {
                     paths[it->to].predecesor = vertex.index;
                     paths[it->to].cost = tentativeCost;
-                    paths[it->to].fScore = tentativeCost + this->heuristic(map.getCoords(it->to), map.getCoords(end));
+                    paths[it->to].fScore = tentativeCost + this->heuristic(map.getCoords(it->to), map.getCoords(target));
                     if(visited[it->to])
                     {
                         visited[it->to] = false;
@@ -170,7 +169,4 @@ namespace pathfinder {
 
         return result;
     }
-
-
-
 }
