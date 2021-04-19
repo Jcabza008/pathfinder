@@ -81,12 +81,29 @@ namespace pathfinder {
         return result;
     }
 
-    int AStarAlgorithm::heuristic(VertexData someNeighbor, VertexData end){
+    int AStarAlgorithm::heuristic(Graph* graph){
         /* One option is to calculate linear distance from someNeighbor to end */
-        //return std::abs(someNeighbor.xPos - end.xPos) + std::abs(someNeighbor.yPos - end.yPos);
+        int start = graph->getVertices()[(int)startPos];
+        int end = graph->getVertices()[(int)targetPos];
         /* Consider also the manhattan approach since we have 8-way movement */
+    }
+    
+    const int& heuristic(const int & xDest, const int & yDest) const
+    {
+        int xd, yd, d;
+        xd=xDest-start;
+        yd=yDest-start;         
+
+        // Euclidian Distance
+        d = static_cast<int>(std::sqrt(xd*xd + yd*yd));
+
+        // Manhattan distance
+        //d=abs(xd)+abs(yd);
         
-        
+        // Chebyshev distance
+        //d=max(abs(xd), abs(yd));
+
+        return d;
     }
     
     std::unordered_map<int, PathData> AStarAlgorithm::findPaths(Graph* graph, int start)
@@ -121,7 +138,7 @@ namespace pathfinder {
                     continue;
 
                 //https://github.com/daancode/a-star/blob/master/source/AStar.cpp
-                if(vertex.data->cost + heuristic() < paths[it->to].cost)
+                if(vertex.data->cost + heuristic(graph) < paths[it->to].cost)
                 {
                     paths[it->to].cost = vertex.data->cost + it->weight;
                     paths[it->to].predecesor = vertex.index;
