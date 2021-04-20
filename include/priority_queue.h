@@ -9,25 +9,29 @@ namespace pathfinder
         PriorityQueue(std::function<bool(T, T)> _comparator = [](T lhs, T rhs){ return lhs < rhs; })
             : comparator(_comparator) {}
 
-        bool push(T element)
+        void push(T element)
         {
             this->data.push_back(element);
+            this->map[element] = this->size() - 1;
             heapifyUp(this->size() - 1);
-            return true;
         }
 
         T top()
         {
-            return this->data[0]; //TODO: throw if empty
+            if(data.empty())
+                throw std::runtime_error("illegal: queue is empty");
+
+            return this->data[0];
         }
 
         void pop()
         {
-            if(this->empty()) //TODO: throw if empty
-                return;
+            if(this->empty())
+                throw std::runtime_error("illegal: queue is empty");
 
             this->data[0] = this->data[this->size() - 1];
             this->data.pop_back();
+            this->map[this->data[0]] = 0;
             this->heapifyDown(0);
         }
 
@@ -41,13 +45,10 @@ namespace pathfinder
             return this->data.empty();
         }
 
-        void reorder()
+        void updateDecreased(T key)
         {
-            int start = (this->size() / 2) / 1;
-            for(auto i = start; i >= 0; i--)
-            {
-                this->heapifyDown(i);
-            }
+            auto index = this->map[key];
+            this->heapifyUp(index);
         }
 
         private:
@@ -78,7 +79,18 @@ namespace pathfinder
             }
         }
 
+        void swap(int lhsIndex, int rhsIndex)
+        {
+            auto temp = this->data[lhsIndex];
+            this->data[lhsIndex] = this->data[rhsIndex];
+            this->data[rhsIndex] = temp;
+            this->map[this->data[lhsIndex]] = lhsIndex;
+            this->map[this->data[rhsIndex]] = rhsIndex;
+        }
+
         std::function<bool(T, T)> comparator;
         std::vector<T> data;
+        std::unordered_map<T, int> map;
     };
+
 }

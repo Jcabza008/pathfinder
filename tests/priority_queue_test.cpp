@@ -118,7 +118,7 @@ TEST(PriorityQueue, fTest_minManyNumbers)
     ASSERT_TRUE(q.empty());
 }
 
-TEST(PriorityQueue, fTest_reorderTest0)
+TEST(PriorityQueue, fTest_updateKeyTest0)
 {
     PriorityQueue<int*> q([](int* lhs, int* rhs){ return *lhs > *rhs; });
     ASSERT_TRUE(q.empty());
@@ -139,7 +139,8 @@ TEST(PriorityQueue, fTest_reorderTest0)
     a = 4;
     b = 5;
     ASSERT_EQ(q.top(), &c);
-    q.reorder();
+    q.updateDecreased(&a);
+    q.updateDecreased(&b);
 
     ASSERT_EQ(q.top(), &b);
     q.pop();

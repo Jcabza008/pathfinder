@@ -10,6 +10,13 @@ namespace pathfinder {
             int cost;
             int predecesor;
         };
+
+        struct VertexData
+        {
+            int index;
+            PathData* data;
+        };
+
         /**
          * @brief Default constructor does nothing
          */
@@ -24,16 +31,10 @@ namespace pathfinder {
          */
         std::unordered_map<int, PathData> findPaths(Graph& graph, int src, int target);
         std::vector<int> backtrack(std::unordered_map<int, PathData> pathData, int src, int target);
-
-        private:
-        struct VertexData
-        {
-            int index;
-            PathData* data;
-        };
     };
 
     bool operator==(const DijkstrasAlgorithm::PathData& lhs, const DijkstrasAlgorithm::PathData& rhs);
+    bool operator==(const DijkstrasAlgorithm::VertexData& lhs, const DijkstrasAlgorithm::VertexData& rhs);
 
     class AStarAlgorithm
     {
@@ -44,6 +45,13 @@ namespace pathfinder {
             int fScore;
             int predecesor;
         };
+
+        struct VertexData
+        {
+            int index;
+            PathData* data;
+        };
+
         AStarAlgorithm() {};
 
         std::unordered_map<int, PathData> findPaths(Map& map, int start, int target);
@@ -51,14 +59,27 @@ namespace pathfinder {
 
         private:
         int heuristic(const Map::Coordinates& src, const Map::Coordinates& target);
-
-        struct VertexData
-        {
-            int index;
-            PathData* data;
-        };
     };
 
     bool operator==(const AStarAlgorithm::PathData& lhs, const AStarAlgorithm::PathData& rhs);
+    bool operator==(const AStarAlgorithm::VertexData& lhs, const AStarAlgorithm::VertexData& rhs);
 
+}
+
+namespace std {
+    template<> struct hash<pathfinder::DijkstrasAlgorithm::VertexData>
+    {
+        size_t operator()(const pathfinder::DijkstrasAlgorithm::VertexData& vertexData) const
+        {
+            return std::hash<int>()(vertexData.index);
+        }
+    };
+
+    template<> struct hash<pathfinder::AStarAlgorithm::VertexData>
+    {
+        size_t operator()(const pathfinder::AStarAlgorithm::VertexData& vertexData) const
+        {
+            return std::hash<int>()(vertexData.index);
+        }
+    };
 }

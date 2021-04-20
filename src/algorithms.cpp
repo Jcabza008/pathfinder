@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 #include <functional>
+#include <hashtable.h>
 #include <list>
 #include <unordered_map>
 #include <vector>
@@ -14,6 +15,11 @@ namespace pathfinder {
     bool operator==(const DijkstrasAlgorithm::PathData& lhs, const DijkstrasAlgorithm::PathData& rhs)
     {
         return lhs.cost == rhs.cost && lhs.predecesor == rhs.predecesor;
+    }
+
+    bool operator==(const DijkstrasAlgorithm::VertexData& lhs, const DijkstrasAlgorithm::VertexData& rhs)
+    {
+        return lhs.index == rhs.index;
     }
 
     std::unordered_map<int, DijkstrasAlgorithm::PathData> DijkstrasAlgorithm::findPaths(Graph& graph, int src, int target)
@@ -55,7 +61,7 @@ namespace pathfinder {
                     paths[it->to].predecesor = vertex.index;
                 }
 
-                queue.reorder();
+                queue.updateDecreased({it->to, &paths[it->to]});
             }
         }
         return std::unordered_map<int, PathData>();
@@ -85,6 +91,16 @@ namespace pathfinder {
         }
 
         return result;
+    }
+
+    bool operator==(const AStarAlgorithm::PathData& lhs, const AStarAlgorithm::PathData& rhs)
+    {
+        return lhs.cost == rhs.cost && lhs.fScore == rhs.fScore && lhs.predecesor == rhs.predecesor;
+    }
+
+    bool operator==(const AStarAlgorithm::VertexData& lhs, const AStarAlgorithm::VertexData& rhs)
+    {
+        return lhs.index == rhs.index;
     }
 
     int AStarAlgorithm::heuristic(const Map::Coordinates& src, const Map::Coordinates& target)
@@ -118,7 +134,6 @@ namespace pathfinder {
 
         while(!queue.empty())
         {
-            queue.reorder();
             auto vertex = queue.top();
             queue.pop();
             if(vertex.index == target){ return paths; } // this backtrack
@@ -137,6 +152,10 @@ namespace pathfinder {
                     {
                         visited[it->to] = false;
                         queue.push({it->to, &paths[it->to]});
+                    }
+                    else
+                    {
+                        queue.updateDecreased({it->to, &paths[it->to]});
                     }
                 }
             }
