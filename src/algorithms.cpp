@@ -38,7 +38,6 @@ namespace pathfinder {
 
         while(!queue.empty())
         {
-            queue.reorder();
             auto vertex = queue.top();
             queue.pop();
             visited[vertex.index] = true;
@@ -55,6 +54,8 @@ namespace pathfinder {
                     paths[it->to].cost = vertex.data->cost + it->weight;
                     paths[it->to].predecesor = vertex.index;
                 }
+
+                queue.reorder();
             }
         }
         return std::unordered_map<int, PathData>();
