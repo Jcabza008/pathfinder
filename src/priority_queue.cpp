@@ -1,6 +1,6 @@
 #include <functional>
 #include <exception>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 #include "priority_queue.h"

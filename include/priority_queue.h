@@ -90,6 +90,6 @@ namespace pathfinder
 
         std::function<bool(T, T)> comparator;
         std::vector<T> data;
-        std::map<T, int> map;
+        std::unordered_map<T, int> map;
     };
 }

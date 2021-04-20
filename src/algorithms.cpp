@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
 #include <functional>
+#include <hashtable.h>
 #include <list>
 #include <unordered_map>
 #include <vector>
@@ -19,11 +20,6 @@ namespace pathfinder {
     bool operator==(const DijkstrasAlgorithm::VertexData& lhs, const DijkstrasAlgorithm::VertexData& rhs)
     {
         return lhs.index == rhs.index;
-    }
-
-    bool operator<(const DijkstrasAlgorithm::VertexData& lhs, const DijkstrasAlgorithm::VertexData& rhs)
-    {
-        return lhs.index < rhs.index;
     }
 
     std::unordered_map<int, DijkstrasAlgorithm::PathData> DijkstrasAlgorithm::findPaths(Graph& graph, int src, int target)
@@ -105,11 +101,6 @@ namespace pathfinder {
     bool operator==(const AStarAlgorithm::VertexData& lhs, const AStarAlgorithm::VertexData& rhs)
     {
         return lhs.index == rhs.index;
-    }
-
-    bool operator<(const AStarAlgorithm::VertexData& lhs, const AStarAlgorithm::VertexData& rhs)
-    {
-        return lhs.index < rhs.index;
     }
 
     int AStarAlgorithm::heuristic(const Map::Coordinates& src, const Map::Coordinates& target)

@@ -35,8 +35,6 @@ namespace pathfinder {
 
     bool operator==(const DijkstrasAlgorithm::PathData& lhs, const DijkstrasAlgorithm::PathData& rhs);
     bool operator==(const DijkstrasAlgorithm::VertexData& lhs, const DijkstrasAlgorithm::VertexData& rhs);
-    bool operator<(const DijkstrasAlgorithm::VertexData& lhs, const DijkstrasAlgorithm::VertexData& rhs);
-
 
     class AStarAlgorithm
     {
@@ -65,6 +63,23 @@ namespace pathfinder {
 
     bool operator==(const AStarAlgorithm::PathData& lhs, const AStarAlgorithm::PathData& rhs);
     bool operator==(const AStarAlgorithm::VertexData& lhs, const AStarAlgorithm::VertexData& rhs);
-    bool operator<(const AStarAlgorithm::VertexData& lhs, const AStarAlgorithm::VertexData& rhs);
 
+}
+
+namespace std {
+    template<> struct hash<pathfinder::DijkstrasAlgorithm::VertexData>
+    {
+        size_t operator()(const pathfinder::DijkstrasAlgorithm::VertexData& vertexData) const
+        {
+            return std::hash<int>()(vertexData.index);
+        }
+    };
+
+    template<> struct hash<pathfinder::AStarAlgorithm::VertexData>
+    {
+        size_t operator()(const pathfinder::AStarAlgorithm::VertexData& vertexData) const
+        {
+            return std::hash<int>()(vertexData.index);
+        }
+    };
 }
