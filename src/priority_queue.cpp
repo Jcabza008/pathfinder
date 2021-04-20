@@ -1,5 +1,5 @@
 #include <functional>
-#include <exception>
+#include <stdexcept>
 #include <unordered_map>
 #include <vector>
 
