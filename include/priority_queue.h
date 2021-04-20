@@ -26,7 +26,7 @@ namespace pathfinder
 
         void pop()
         {
-            if(this->empty()) //TODO: throw if empty
+            if(this->empty())
                 throw std::runtime_error("illegal: queue is empty");
 
             this->data[0] = this->data[this->size() - 1];
@@ -92,4 +92,5 @@ namespace pathfinder
         std::vector<T> data;
         std::unordered_map<T, int> map;
     };
+
 }
